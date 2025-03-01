@@ -81,7 +81,7 @@
       <tech>Oslo.js crypto for cryptographic operations</tech>
     </security>
     <internationalization>
-      <tech>Inlang Paraglide for i18n management</tech>
+      <tech>@inlang/paraglide-js v2 for i18n management</tech>
       <tech>@google/generative-ai for automated translation</tech>
       <tech>Gemini Flash 2.0 Experiment model</tech>
     </internationalization>
@@ -135,13 +135,15 @@
   </styling>
 
   <i18n>
-    <rule>Use Vietnamese (vi-vn) as primary language for all content</rule>
+    <rule>Use Vietnamese (vi) as primary locale for all content</rule>
     <rule>All user-facing strings must be added to message files (messages/*.json)</rule>
     <rule>Maintain consistent key structures across language files</rule>
     <rule>Document any new i18n keys in project.inlang/settings.json</rule>
-    <rule>Test translations in supported languages (vi-vn primary, en-us secondary)</rule>
+    <rule>Test translations in supported locales (vi primary, en secondary)</rule>
     <rule>Follow inlang message format schema for translations</rule>
-    <rule>Use Paraglide runtime functions for translation access</rule>
+    <rule>Use Paraglide v2 functions (getLocale, setLocale) for locale management</rule>
+    <rule>Use localizeHref for all internal navigation links</rule>
+    <rule>Implement locale switching with overwriteSetLocale</rule>
     <rule>Ensure all messages pass inlang lint rules</rule>
     <rule>Auto-translate user-generated content (calendar, events, blog posts) using Gemini</rule>
     <rule>Add manual review option for AI-generated translations</rule>
@@ -208,7 +210,7 @@
     <rule>Include test cases for component rendering</rule>
     <rule>Maintain test coverage for critical features</rule>
     <rule>Test authentication flows thoroughly</rule>
-    <rule>Verify i18n functionality in tests</rule>
+    <rule>Verify i18n functionality in tests (getLocale, setLocale, localizeHref)</rule>
     <rule>Include database operation tests</rule>
     <rule>Test D3.js visualization interactions</rule>
     <rule>Verify content management workflows</rule>
@@ -237,6 +239,8 @@
     <rule>Keep configuration files documented</rule>
     <rule>Document authentication flows and security measures</rule>
     <rule>Maintain i18n key documentation</rule>
+    <rule>Document Paraglide v2 configuration in vite.config.ts</rule>
+    <rule>Document URL localization with localizeHref usage</rule>
     <rule>Include database schema documentation</rule>
     <rule>Document facility booking integration procedures</rule>
     <rule>Provide content management system user guide</rule>
