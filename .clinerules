@@ -1,0 +1,260 @@
+<rules>
+  <project-description>
+    <name>Student Research Clubs Network Portal</name>
+    <description>Website for the Student Research Clubs Network under the Student Innovation and Entrepreneurship Center, Hanoi University of Technology. The platform serves as a central hub for managing research club activities, events, and resources.</description>
+    <core-features>
+      <feature>Dynamic homepage with featured news and events</feature>
+      <feature>Categorized news section with filtering capabilities</feature>
+      <feature>Interactive network visualization using D3.js</feature>
+      <feature>Weekly schedule management system</feature>
+      <feature>Resource sharing and facility management</feature>
+      <feature>Bilingual support (Vietnamese primary, English secondary) with AI translation for user-generated content</feature>
+      <feature>Content management system for blog posts and resources</feature>
+      <feature>Member management and access control</feature>
+      <feature>Site configuration and settings management</feature>
+      <feature>User-generated content submission system</feature>
+    </core-features>
+  </project-description>
+
+  <design-theme>
+    <concept>Modern academic institution blending innovation with tradition</concept>
+    <principles>
+      <principle>Modern and innovative interface with clean, minimalist aesthetics</principle>
+      <principle>Academic professionalism reflecting university heritage</principle>
+      <principle>Dynamic elements showcasing research and innovation</principle>
+      <principle>Traditional Vietnamese design motifs in modern context</principle>
+      <principle>Connected network visualization emphasizing collaboration</principle>
+      <principle>Growth-oriented visuals representing student development</principle>
+      <principle>International academic standards with local cultural elements</principle>
+    </principles>
+    <colors>
+      <color>Deep navy blue - representing academia and professionalism</color>
+      <color>Vibrant teal - symbolizing innovation and growth</color>
+      <color>Traditional red accents - honoring Vietnamese heritage</color>
+      <color>Modern slate gray - providing neutral balance</color>
+      <color>Fresh mint green - representing youth and development</color>
+    </colors>
+    <typography>
+      <style>Clean, modern sans-serif for primary text</style>
+      <style>Professional serif for academic content</style>
+      <style>Geometric sans for innovative elements</style>
+    </typography>
+    <visual-elements>
+      <element>Modern grid layouts with traditional proportions</element>
+      <element>Network visualization with cultural pattern influences</element>
+      <element>Clean cards with subtle traditional decorative elements</element>
+      <element>Interactive elements with smooth, professional animations</element>
+      <element>Minimalist icons incorporating traditional symbols</element>
+    </visual-elements>
+  </design-theme>
+
+  <technologies>
+    <core>
+      <tech>SvelteKit 2.x for app framework</tech>
+      <tech>TypeScript 5.x for type safety</tech>
+      <tech>Vite 6.x for build tooling</tech>
+    </core>
+    <cloudflare>
+      <tech>Cloudflare Pages for hosting and deployment</tech>
+      <tech>Cloudflare Workers for serverless functions</tech>
+      <tech>Cloudflare D1 for serverless SQLite database</tech>
+      <tech>Cloudflare R2 for S3-compatible object storage</tech>
+      <tech>Cloudflare Images for image optimization and CDN</tech>
+    </cloudflare>
+    <styling>
+      <tech>Tailwind CSS 4.x for utility-first styling</tech>
+      <tech>@tailwindcss/typography for content styling</tech>
+      <tech>@tailwindcss/forms for form elements</tech>
+      <tech>lucide-svelte for consistent iconography</tech>
+    </styling>
+    <database>
+      <tech>Drizzle ORM for database operations</tech>
+      <tech>libSQL client for D1 connectivity</tech>
+    </database>
+    <testing>
+      <tech>Vitest for unit testing</tech>
+      <tech>Testing Library for component testing</tech>
+      <tech>JSDOM for browser environment simulation</tech>
+    </testing>
+    <security>
+      <tech>Node-RS Argon2 for password hashing</tech>
+      <tech>Oslo.js crypto for cryptographic operations</tech>
+    </security>
+    <internationalization>
+      <tech>Inlang Paraglide for i18n management</tech>
+      <tech>@google/generative-ai for automated translation</tech>
+      <tech>Gemini Flash 2.0 Experiment model</tech>
+    </internationalization>
+    <visualization>
+      <tech>D3.js v7 for network visualization</tech>
+    </visualization>
+  </technologies>
+
+  <architecture>
+    <rule>Apply Repository pattern for data access layers</rule>
+    <rule>Use Store pattern for state management (custom stores or framework-provided)</rule>
+    <rule>Implement Service pattern for business logic</rule>
+    <rule>Follow Factory pattern for complex object creation</rule>
+    <rule>Use Observer pattern for reactive state updates</rule>
+    <rule>Implement Strategy pattern for interchangeable algorithms</rule>
+    <rule>Apply Adapter pattern for external service integration</rule>
+    <rule>Use Facade pattern to simplify complex subsystems</rule>
+  </architecture>
+
+  <code-style>
+    <rule>Follow TypeScript best practices and maintain type safety across the codebase</rule>
+    <rule>Use SvelteKit conventions for routing and data loading</rule>
+    <rule>Format code using Prettier configuration and ESLint rules</rule>
+    <rule>Keep component files focused and modular (<200 lines recommended)</rule>
+    <rule>Use meaningful variable and function names that reflect their purpose</rule>
+    <rule>Type database queries using $inferSelect from schema definitions</rule>
+    <rule>Follow Cloudflare adapter constraints for serverless deployment</rule>
+    <rule>Implement proper component structure for each major section</rule>
+    <rule>Follow SOLID principles in code organization</rule>
+    <rule>Use dependency injection for better testability</rule>
+    <rule>Maintain consistent file and folder structure</rule>
+    <rule>Write self-documenting code with clear naming</rule>
+    <rule>Keep business logic separate from UI components</rule>
+    <rule>Implement proper error boundaries and error handling</rule>
+    <rule>Use TypeScript path aliases for clean imports</rule>
+    <rule>Follow semantic versioning for module updates</rule>
+  </code-style>
+
+  <styling>
+    <rule>Use Tailwind CSS utility classes for consistent styling</rule>
+    <rule>Follow mobile-first responsive design principles</rule>
+    <rule>Utilize @tailwindcss/typography for rich text content</rule>
+    <rule>Implement dark mode support using Tailwind's dark: variant</rule>
+    <rule>Create reusable component classes using @apply when needed</rule>
+    <rule>Maintain a consistent color palette using Tailwind theme configuration</rule>
+    <rule>Use @tailwindcss/forms for styled form elements</rule>
+    <rule>Follow spacing and sizing scale from Tailwind configuration</rule>
+    <rule>Use Lucide icons consistently with themed colors</rule>
+    <rule>Maintain consistent icon sizes across similar UI elements</rule>
+    <rule>Apply color transitions for interactive icons</rule>
+  </styling>
+
+  <i18n>
+    <rule>Use Vietnamese (vi-vn) as primary language for all content</rule>
+    <rule>All user-facing strings must be added to message files (messages/*.json)</rule>
+    <rule>Maintain consistent key structures across language files</rule>
+    <rule>Document any new i18n keys in project.inlang/settings.json</rule>
+    <rule>Test translations in supported languages (vi-vn primary, en-us secondary)</rule>
+    <rule>Follow inlang message format schema for translations</rule>
+    <rule>Use Paraglide runtime functions for translation access</rule>
+    <rule>Ensure all messages pass inlang lint rules</rule>
+    <rule>Auto-translate user-generated content (calendar, events, blog posts) using Gemini</rule>
+    <rule>Add manual review option for AI-generated translations</rule>
+    <rule>Cache successful translations in database for reuse</rule>
+    <rule>Handle AI service rate limits and fallbacks</rule>
+  </i18n>
+
+  <security>
+    <rule>Follow session-based authentication patterns from auth.ts</rule>
+    <rule>Use crypto.getRandomValues for secure token generation</rule>
+    <rule>Implement proper session expiration and renewal (30 days with 15-day renewal)</rule>
+    <rule>Use Argon2 for password hashing</rule>
+    <rule>Use environment variables for sensitive configuration</rule>
+    <rule>Enforce proper cookie security attributes</rule>
+    <rule>Validate all session tokens before granting access</rule>
+    <rule>Implement role-based access control for content management</rule>
+    <rule>Enforce content submission validation and sanitization</rule>
+    <rule>Implement user permission levels for different operations</rule>
+  </security>
+
+  <database>
+    <rule>Follow schema definitions in src/lib/server/db/schema.ts</rule>
+    <rule>Use proper typing for database queries and results</rule>
+    <rule>Implement migrations for schema changes</rule>
+    <rule>Add appropriate indexes for query optimization</rule>
+    <rule>Use Drizzle ORM features for type-safe queries</rule>
+    <rule>Configure proper D1 database bindings in wrangler.toml</rule>
+    <rule>Follow SQLite best practices for Cloudflare D1</rule>
+    <rule>Implement efficient data structures for network visualization</rule>
+    <rule>Design schema for content management system</rule>
+    <rule>Maintain proper relationship between users and content</rule>
+  </database>
+
+  <storage>
+    <rule>Use Cloudflare R2 for storing uploaded documents and resources</rule>
+    <rule>Implement proper bucket organization for different asset types</rule>
+    <rule>Use Cloudflare Images for optimized image delivery</rule>
+    <rule>Configure appropriate caching strategies for static assets</rule>
+    <rule>Implement secure upload policies and access controls</rule>
+    <rule>Use presigned URLs for secure file downloads</rule>
+    <rule>Follow S3-compatible API best practices for R2</rule>
+    <rule>Optimize image transformations using Cloudflare Images API</rule>
+    <rule>Implement file type validation for user uploads</rule>
+    <rule>Set up proper backup strategies for user content</rule>
+  </storage>
+
+  <ui-components>
+    <rule>Create reusable components for news and event cards</rule>
+    <rule>Implement responsive calendar component for schedule display</rule>
+    <rule>Build interactive D3.js network visualization component</rule>
+    <rule>Design consistent filtering interfaces across sections</rule>
+    <rule>Ensure proper loading states and error boundaries</rule>
+    <rule>Maintain accessibility standards (WCAG 2.1)</rule>
+    <rule>Apply consistent Tailwind classes for component styling</rule>
+    <rule>Use Lucide icons instead of custom SVGs for better bundle optimization</rule>
+    <rule>Build rich text editor for content management</rule>
+    <rule>Create member management interface components</rule>
+    <rule>Implement site settings configuration forms</rule>
+  </ui-components>
+
+  <testing>
+    <rule>Write unit tests for new business logic components</rule>
+    <rule>Add integration tests for API endpoints</rule>
+    <rule>Include test cases for component rendering</rule>
+    <rule>Maintain test coverage for critical features</rule>
+    <rule>Test authentication flows thoroughly</rule>
+    <rule>Verify i18n functionality in tests</rule>
+    <rule>Include database operation tests</rule>
+    <rule>Test D3.js visualization interactions</rule>
+    <rule>Verify content management workflows</rule>
+    <rule>Test user permission enforcement</rule>
+  </testing>
+
+  <performance>
+    <rule>Optimize bundle size and code splitting (prefer Lucide icons over custom SVGs)</rule>
+    <rule>Use proper loading strategies for data fetching</rule>
+    <rule>Implement caching where appropriate</rule>
+    <rule>Profile and monitor performance metrics</rule>
+    <rule>Optimize database queries for D1 performance</rule>
+    <rule>Follow Cloudflare Pages and Workers best practices</rule>
+    <rule>Utilize Cloudflare Images for optimized image delivery</rule>
+    <rule>Optimize network graph rendering performance</rule>
+    <rule>Cache AI translation results efficiently</rule>
+    <rule>Implement translation queue for large content</rule>
+    <rule>Implement pagination for content listings</rule>
+    <rule>Optimize file upload handling</rule>
+  </performance>
+
+  <documentation>
+    <rule>Update README.md for significant changes</rule>
+    <rule>Document API endpoints and their usage</rule>
+    <rule>Add JSDoc comments for complex functions</rule>
+    <rule>Keep configuration files documented</rule>
+    <rule>Document authentication flows and security measures</rule>
+    <rule>Maintain i18n key documentation</rule>
+    <rule>Include database schema documentation</rule>
+    <rule>Document facility booking integration procedures</rule>
+    <rule>Provide content management system user guide</rule>
+    <rule>Document member roles and permissions</rule>
+    <rule>Document AI translation workflow and review process</rule>
+    <rule>Secure API keys for AI services in environment variables</rule>
+  </documentation>
+
+  <deployment>
+    <rule>Test builds locally before deployment</rule>
+    <rule>Configure Cloudflare Pages deployment settings</rule>
+    <rule>Set up proper D1 database bindings</rule>
+    <rule>Configure R2 bucket access and policies</rule>
+    <rule>Set up Cloudflare Images account and transformations</rule>
+    <rule>Manage environment variables in Cloudflare dashboard</rule>
+    <rule>Monitor Workers and Pages analytics</rule>
+    <rule>Implement proper staging environments</rule>
+    <rule>Configure automated backup procedures</rule>
+    <rule>Set up monitoring for user-generated content</rule>
+  </deployment>
+</rules>

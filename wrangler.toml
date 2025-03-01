@@ -1,0 +1,10 @@
+name = "hust_bke_cc"
+main = "src/index.ts"
+compatibility_date = "2022-11-07"
+node_compat = true
+
+[[ d1_databases ]]
+binding = "qjGSHxIzoQ0sbOI6HqTq1upLYx8ZECBqUpvCdJHC"
+database_name = "hust-bke-cc"
+database_id = "60c7341d-bca0-4b0f-b69f-9eca1653172d"
+migrations_dir = "drizzle/migrations"
