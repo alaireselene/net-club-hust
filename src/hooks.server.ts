@@ -24,10 +24,10 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-const handleParaglide: Handle = ({ event, resolve }) =>
-	paraglideMiddleware(event.request, ({ locale }) => {
-		return resolve(event, {
-			transformPageChunk: ({ html }) => html.replace('%lang%', locale),
-		});
-	}, { disableAsyncLocalStorage: true });;
-export const handle: Handle = sequence(handleAuth, handleParaglide);
+// const handleParaglide: Handle = ({ event, resolve }) =>
+// 	paraglideMiddleware(event.request, ({ locale }) => {
+// 		return resolve(event, {
+// 			transformPageChunk: ({ html }) => html.replace('%lang%', locale),
+// 		});
+// 	}, { disableAsyncLocalStorage: true });;
+export const handle: Handle = sequence(handleAuth);
