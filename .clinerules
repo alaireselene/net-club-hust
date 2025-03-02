@@ -8,7 +8,7 @@
       <feature>Interactive network visualization using D3.js</feature>
       <feature>Weekly schedule management system</feature>
       <feature>Resource sharing and facility management</feature>
-      <feature>Bilingual support (Vietnamese primary, English secondary) with AI translation for user-generated content</feature>
+      <feature>Nội dung tiếng Việt</feature>
       <feature>Content management system for blog posts and resources</feature>
       <feature>Member management and access control</feature>
       <feature>Site configuration and settings management</feature>
@@ -134,23 +134,6 @@
     <rule>Apply color transitions for interactive icons</rule>
   </styling>
 
-  <i18n>
-    <rule>Use Vietnamese (vi) as primary locale for all content</rule>
-    <rule>All user-facing strings must be added to message files (messages/*.json)</rule>
-    <rule>Maintain consistent key structures across language files</rule>
-    <rule>Document any new i18n keys in project.inlang/settings.json</rule>
-    <rule>Test translations in supported locales (vi primary, en secondary)</rule>
-    <rule>Follow inlang message format schema for translations</rule>
-    <rule>Use Paraglide v2 functions (getLocale, setLocale) for locale management</rule>
-    <rule>Use localizeHref for all internal navigation links</rule>
-    <rule>Implement locale switching with overwriteSetLocale</rule>
-    <rule>Ensure all messages pass inlang lint rules</rule>
-    <rule>Auto-translate user-generated content (calendar, events, blog posts) using Gemini</rule>
-    <rule>Add manual review option for AI-generated translations</rule>
-    <rule>Cache successful translations in database for reuse</rule>
-    <rule>Handle AI service rate limits and fallbacks</rule>
-  </i18n>
-
   <security>
     <rule>Follow session-based authentication patterns from auth.ts</rule>
     <rule>Use crypto.getRandomValues for secure token generation</rule>
@@ -210,7 +193,7 @@
     <rule>Include test cases for component rendering</rule>
     <rule>Maintain test coverage for critical features</rule>
     <rule>Test authentication flows thoroughly</rule>
-    <rule>Verify i18n functionality in tests (getLocale, setLocale, localizeHref)</rule>
+
     <rule>Include database operation tests</rule>
     <rule>Test D3.js visualization interactions</rule>
     <rule>Verify content management workflows</rule>
@@ -238,7 +221,7 @@
     <rule>Add JSDoc comments for complex functions</rule>
     <rule>Keep configuration files documented</rule>
     <rule>Document authentication flows and security measures</rule>
-    <rule>Maintain i18n key documentation</rule>
+
     <rule>Document Paraglide v2 configuration in vite.config.ts</rule>
     <rule>Document URL localization with localizeHref usage</rule>
     <rule>Include database schema documentation</rule>
