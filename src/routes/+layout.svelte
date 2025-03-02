@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/state';
+	import Breadcrumb from '$lib/components/Breadcrumb.svelte';
 
 	let mobileMenuOpen = $state(false);
 	let currentLang = $state('VI');
@@ -32,34 +33,39 @@
 	let { children } = $props();
 </script>
 
-<div class="flex min-h-screen flex-col bg-white font-sans" class:overflow-hidden={mobileMenuOpen}>
+<div
+	class="bg-chalk-100 flex min-h-screen flex-col font-sans"
+	class:overflow-hidden={mobileMenuOpen}
+>
 	<!-- Primary Navigation -->
-	<header class="fixed top-0 z-50 w-full bg-white shadow-sm transition-shadow duration-200">
+	<header class="bg-chalk-100 fixed top-0 z-50 w-full shadow-md transition-shadow duration-200">
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div class="flex h-20 items-center justify-between">
 				<!-- Logo and Text -->
-				<div class="flex items-center space-x-4">
-					<img src="/logo.svg" alt="HUST Research Clubs Network Logo" class="h-12 w-auto" />
-					<div class="hidden sm:block">
-						<p class="font-sans text-sm font-light text-slate-600">
-							Trung tâm Sáng tạo và Khởi nghiệp Sinh viên
-						</p>
-						<p class="text-navy-900 font-sans text-lg font-bold">
-							Mạng lưới CLB sinh viên nghiên cứu khoa học
-						</p>
-					</div>
-				</div>
+				<a href="/">
+					<div class="flex items-center space-x-4">
+						<img src="/logo.svg" alt="HUST Research Clubs Network Logo" class="h-12 w-auto" />
+						<div class="hidden sm:block">
+							<p class="font-sans text-sm font-medium text-slate-600">
+								Trung tâm Sáng tạo và Khởi nghiệp Sinh viên
+							</p>
+							<p class="text-navy-800 font-sans text-lg font-bold uppercase">
+								Mạng lưới CLB sinh viên nghiên cứu khoa học
+							</p>
+						</div>
+					</div></a
+				>
 
 				<!-- Primary Nav Items -->
 				<div class="hidden items-center space-x-6 md:flex">
 					<a
 						href="/calendar"
-						class="group flex items-center text-slate-600 transition-colors hover:text-teal-600 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none"
+						class="group hover:text-cardinal-600 focus:ring-cardinal-600 flex items-center text-slate-600 transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
 						aria-label="Lịch công tác"
 					>
 						<span class="flex items-center">
 							<svg
-								class="mr-2 h-5 w-5 transition-colors group-hover:stroke-teal-600"
+								class="group-hover:stroke-cardinal-600 mr-2 h-5 w-5 transition-colors"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -76,12 +82,12 @@
 					</a>
 					<a
 						href="/contact"
-						class="group flex items-center text-slate-600 transition-colors hover:text-teal-600 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none"
+						class="group hover:text-cardinal-600 focus:ring-cardinal-600 flex items-center text-slate-600 transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
 						aria-label="Liên hệ"
 					>
 						<span class="flex items-center">
 							<svg
-								class="mr-2 h-5 w-5 transition-colors group-hover:stroke-teal-600"
+								class="group-hover:stroke-cardinal-600 mr-2 h-5 w-5 transition-colors"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -97,7 +103,7 @@
 						</span>
 					</a>
 					<button
-						class="text-slate-600 transition-colors hover:text-teal-600 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none"
+						class="hover:text-cardinal-600 focus:ring-cardinal-600 text-slate-600 transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
 						aria-label="Tìm kiếm"
 					>
 						<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,7 +116,7 @@
 						</svg>
 					</button>
 					<button
-						class="rounded-md border border-slate-300 bg-white px-3 py-1 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-teal-600 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none"
+						class="border-cardinal-200 bg-chalk-100 text-cardinal-600 hover:bg-cardinal-50 hover:border-cardinal-300 active:bg-cardinal-100 focus:ring-cardinal-600 rounded-md border px-3 py-1.5 text-sm font-medium transition-all focus:ring-2 focus:ring-offset-2 focus:outline-none"
 						onclick={toggleLanguage}
 						aria-label={`Switch to ${currentLang === 'VI' ? 'English' : 'Vietnamese'}`}
 					>
@@ -120,7 +126,7 @@
 
 				<!-- Mobile Menu Button -->
 				<button
-					class="menu-button rounded-md p-2 text-slate-600 hover:bg-slate-50 hover:text-teal-600 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none md:hidden"
+					class="menu-button hover:text-cardinal-600 focus:ring-cardinal-600 rounded-md p-2 text-slate-600 hover:bg-slate-50 focus:ring-2 focus:ring-offset-2 focus:outline-none md:hidden"
 					onclick={toggleMobileMenu}
 					aria-expanded={mobileMenuOpen}
 					aria-controls="mobile-menu"
@@ -140,16 +146,16 @@
 	</header>
 
 	<!-- Secondary Navigation -->
-	<nav class="fixed top-20 z-40 w-full bg-slate-50 shadow-sm">
+	<nav class="border-cardinal-100 bg-chalk-50 fixed top-20 z-40 w-full border-y shadow-sm">
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-			<div class="hidden h-12 items-center justify-between md:flex">
+			<div class="hidden h-14 items-center justify-between md:flex">
 				<div class="flex flex-1 items-center justify-between space-x-8">
-					{#each [{ href: '/about', text: 'Giới thiệu' }, { href: '/news', text: 'Tin tức' }, { href: '/events', text: 'Sự kiện nổi bật' }, { href: '/network', text: 'Mạng lưới' }, { href: '/resources', text: 'Tài nguyên' }, { href: '/procedures', text: 'Thủ tục' }] as { href, text }}
+					{#each [{ href: '/about', text: 'Giới thiệu' }, { href: '/news', text: 'Tin tức' }, { href: '/events', text: 'Sự kiện nổi bật' }, { href: '/network', text: 'Mạng lưới' }, { href: '/resources', text: 'Tài nguyên' }, { href: '/facilities', text: 'Cơ sở vật chất' }] as { href, text }}
 						<a
 							{href}
-							class="text-slate-700 transition-colors hover:text-teal-600 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none {page
+							class="hover:text-cardinal-600 focus:ring-cardinal-600 text-slate-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none {page
 								.url.pathname === href
-								? 'font-medium text-teal-600'
+								? 'text-cardinal-600 font-medium'
 								: ''}"
 							aria-current={page.url.pathname === href ? 'page' : undefined}
 						>
@@ -160,7 +166,7 @@
 						href="https://student.hust.edu.vn"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-teal-600 transition-colors hover:text-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none"
+						class="text-cardinal-600 hover:text-cardinal-700 focus:ring-cardinal-600 transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
 						aria-label="Open eHUST in new tab"
 					>
 						eHUST
@@ -194,7 +200,7 @@
 				<div class="text-lg font-medium text-slate-900">Menu</div>
 				<button
 					onclick={toggleMobileMenu}
-					class="rounded-md p-2 text-slate-600 hover:bg-slate-50 hover:text-teal-600 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none"
+					class="hover:text-cardinal-600 focus:ring-cardinal-600 rounded-md p-2 text-slate-600 hover:bg-slate-50 focus:ring-2 focus:ring-offset-2 focus:outline-none"
 					aria-label="Close menu"
 				>
 					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,9 +218,9 @@
 					{#each [{ href: '/calendar', text: 'Lịch công tác' }, { href: '/contact', text: 'Liên hệ' }] as { href, text }}
 						<a
 							{href}
-							class="block rounded-md px-3 py-2 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-teal-600 {page
+							class="hover:text-cardinal-600 block rounded-md px-3 py-2 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 {page
 								.url.pathname === href
-								? 'bg-slate-50 text-teal-600'
+								? 'text-cardinal-600 bg-slate-50'
 								: ''}"
 							aria-current={page.url.pathname === href ? 'page' : undefined}
 						>
@@ -222,12 +228,12 @@
 						</a>
 					{/each}
 					<div class="my-4 border-t border-slate-200"></div>
-					{#each [{ href: '/about', text: 'Giới thiệu' }, { href: '/news', text: 'Tin tức' }, { href: '/events', text: 'Sự kiện nổi bật' }, { href: '/network', text: 'Mạng lưới' }, { href: '/resources', text: 'Tài nguyên' }, { href: '/procedures', text: 'Thủ tục' }] as { href, text }}
+					{#each [{ href: '/about', text: 'Giới thiệu' }, { href: '/news', text: 'Tin tức' }, { href: '/events', text: 'Sự kiện nổi bật' }, { href: '/network', text: 'Mạng lưới' }, { href: '/resources', text: 'Tài nguyên' }, { href: '/facilities', text: 'Cơ sở vật chất' }] as { href, text }}
 						<a
 							{href}
-							class="block rounded-md px-3 py-2 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-teal-600 {page
+							class="hover:text-cardinal-600 block rounded-md px-3 py-2 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 {page
 								.url.pathname === href
-								? 'bg-slate-50 text-teal-600'
+								? 'text-cardinal-600 bg-slate-50'
 								: ''}"
 							aria-current={page.url.pathname === href ? 'page' : undefined}
 						>
@@ -238,7 +244,7 @@
 						href="https://student.hust.edu.vn"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="mt-2 block rounded-md px-3 py-2 text-base font-medium text-teal-600 transition-colors hover:bg-slate-50"
+						class="text-cardinal-600 mt-2 block rounded-md px-3 py-2 text-base font-medium transition-colors hover:bg-slate-50"
 						aria-label="Open eHUST in new tab"
 					>
 						eHUST
@@ -249,16 +255,17 @@
 	</div>
 
 	<!-- Main Content Area -->
-	<main class="mt-32 flex-grow pb-16">
-		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+	<main class="mt-32 flex-grow pb-20">
+		<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+			<Breadcrumb />
 			{@render children()}
 		</div>
 	</main>
 
 	<!-- Footer -->
-	<footer class="border-t border-slate-200 bg-slate-50">
+	<footer class="border-cardinal-100 bg-chalk-50 border-t">
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-			<div class="py-12 lg:py-16">
+			<div class="py-16 lg:py-20">
 				<div class="grid grid-cols-1 gap-8 lg:grid-cols-4">
 					<!-- Brand Column -->
 					<div class="space-y-6">
@@ -270,7 +277,7 @@
 						<div class="flex space-x-4">
 							<a
 								href={null}
-								class="text-slate-500 transition-colors hover:text-teal-600"
+								class="hover:text-cardinal-600 text-slate-500 transition-colors"
 								aria-label="Follow us on Facebook"
 							>
 								<svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -281,7 +288,7 @@
 							</a>
 							<a
 								href={null}
-								class="text-slate-500 transition-colors hover:text-teal-600"
+								class="hover:text-cardinal-600 text-slate-500 transition-colors"
 								aria-label="Follow us on Youtube"
 							>
 								<svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -295,11 +302,16 @@
 
 					<!-- Quick Links -->
 					<div>
-						<h3 class="text-navy-900 font-serif text-sm font-semibold">Liên kết nhanh</h3>
-						<ul class="mt-4 space-y-3">
+						<h3 class="text-cardinal-900 font-sans text-sm font-bold tracking-wide uppercase">
+							Liên kết nhanh
+						</h3>
+						<ul class="mt-6 space-y-3">
 							{#each [{ href: '/about', text: 'Giới thiệu' }, { href: '/news', text: 'Tin tức' }, { href: '/events', text: 'Sự kiện' }, { href: '/resources', text: 'Tài nguyên' }] as { href, text }}
 								<li>
-									<a {href} class="text-sm text-slate-600 transition-colors hover:text-teal-600">
+									<a
+										{href}
+										class="hover:text-cardinal-600 text-sm text-slate-600 transition-colors"
+									>
 										{text}
 									</a>
 								</li>
@@ -309,11 +321,16 @@
 
 					<!-- Resources -->
 					<div>
-						<h3 class="text-navy-900 font-serif text-sm font-semibold">Tài nguyên</h3>
-						<ul class="mt-4 space-y-3">
+						<h3 class="text-cardinal-900 font-sans text-sm font-bold tracking-wide uppercase">
+							Tài nguyên
+						</h3>
+						<ul class="mt-6 space-y-3">
 							{#each [{ href: '/resources/facilities', text: 'Cơ sở vật chất' }, { href: '/resources/docs', text: 'Tài liệu' }, { href: '/resources/templates', text: 'Biểu mẫu' }, { href: '/faq', text: 'Câu hỏi thường gặp' }] as { href, text }}
 								<li>
-									<a {href} class="text-sm text-slate-600 transition-colors hover:text-teal-600">
+									<a
+										{href}
+										class="hover:text-cardinal-600 text-sm text-slate-600 transition-colors"
+									>
 										{text}
 									</a>
 								</li>
@@ -323,8 +340,10 @@
 
 					<!-- Contact Info -->
 					<div>
-						<h3 class="text-navy-900 font-serif text-sm font-semibold">Liên hệ</h3>
-						<ul class="mt-4 space-y-3 text-sm text-slate-600">
+						<h3 class="text-cardinal-900 font-sans text-sm font-bold tracking-wide uppercase">
+							Liên hệ
+						</h3>
+						<ul class="mt-6 space-y-4 text-sm text-slate-600">
 							<li class="flex items-start">
 								<svg
 									class="mt-0.5 mr-3 h-5 w-5 text-slate-400"
@@ -365,7 +384,7 @@
 										d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
 									/>
 								</svg>
-								<a href="mailto:sv@hust.edu.vn" class="transition-colors hover:text-teal-600">
+								<a href="mailto:sv@hust.edu.vn" class="hover:text-cardinal-600 transition-colors">
 									sv@hust.edu.vn
 								</a>
 							</li>
@@ -383,7 +402,7 @@
 										d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
 									/>
 								</svg>
-								<a href="tel:02438692122" class="transition-colors hover:text-teal-600">
+								<a href="tel:02438692122" class="hover:text-cardinal-600 transition-colors">
 									(024) 3869 2122
 								</a>
 							</li>
@@ -392,15 +411,17 @@
 				</div>
 
 				<!-- Bottom Bar -->
-				<div class="mt-12 border-t border-slate-200 pt-8">
+				<div class="border-cardinal-100 mt-16 border-t pt-8">
 					<div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
 						<p class="text-sm text-slate-600">
 							© 2024 Đại học Bách khoa Hà Nội. All rights reserved.
 						</p>
 						<div class="flex items-center space-x-4 text-sm text-slate-600">
-							<a href="/privacy" class="transition-colors hover:text-teal-600">Privacy Policy</a>
-							<span class="text-slate-400">|</span>
-							<a href="/terms" class="transition-colors hover:text-teal-600">Terms of Service</a>
+							<a href="/privacy" class="hover:text-cardinal-600 transition-colors">Privacy Policy</a
+							>
+							<span class="text-cardinal-200">|</span>
+							<a href="/terms" class="hover:text-cardinal-600 transition-colors">Terms of Service</a
+							>
 						</div>
 					</div>
 				</div>

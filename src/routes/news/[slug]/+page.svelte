@@ -50,7 +50,7 @@
 				{new Date(post.publishedAt).toLocaleDateString()}
 			</time>
 		</div>
-		<h1 class="mb-4 font-serif text-4xl text-gray-900 dark:text-gray-100">
+		<h1 class="mb-4 font-sans text-4xl text-gray-900 dark:text-gray-100">
 			{post.title}
 		</h1>
 		<p class="text-gray-500 dark:text-gray-400">

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import PageHeader from '$lib/components/PageHeader.svelte';
+
 	let categories = [
 		{ id: 'research', name: 'Research' },
 		{ id: 'events', name: 'Events' },
@@ -42,21 +44,19 @@
 </script>
 
 <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-	<header class="mb-8">
-		<h1 class="mb-4 font-serif text-4xl text-gray-900 dark:text-gray-100">Latest News</h1>
-		<p class="text-lg text-gray-600 dark:text-gray-300">
-			Stay updated with the latest from our research community
-		</p>
-	</header>
+	<PageHeader
+		title="Latest News"
+		subtitle="Stay updated with the latest from our research community"
+	/>
 
 	<!-- Categories -->
 	<nav class="mb-8">
 		<div class="flex flex-wrap gap-2">
 			<button
 				class="rounded-full px-4 py-2 text-sm font-medium transition-colors
-               {selectedCategory === null
-					? 'bg-teal-600 text-white'
-					: 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'}"
+                {selectedCategory === null
+					? 'bg-cardinal-600 text-white'
+					: 'bg-slate-100 text-slate-700 hover:bg-slate-200'}"
 				on:click={() => (selectedCategory = null)}
 			>
 				All Categories
@@ -64,9 +64,9 @@
 			{#each categories as category}
 				<button
 					class="rounded-full px-4 py-2 text-sm font-medium transition-colors
-                 {selectedCategory === category.id
-						? 'bg-teal-600 text-white'
-						: 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'}"
+                  {selectedCategory === category.id
+						? 'bg-cardinal-600 text-white'
+						: 'bg-slate-100 text-slate-700 hover:bg-slate-200'}"
 					on:click={() => (selectedCategory = category.id)}
 				>
 					{category.name}
@@ -80,9 +80,9 @@
 		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 			{#each Array(6) as _}
 				<div class="animate-pulse">
-					<div class="mb-4 h-48 rounded-lg bg-gray-200 dark:bg-gray-700"></div>
-					<div class="mb-2 h-6 w-3/4 rounded bg-gray-200 dark:bg-gray-700"></div>
-					<div class="h-4 w-1/2 rounded bg-gray-200 dark:bg-gray-700"></div>
+					<div class="mb-4 h-48 rounded-lg bg-slate-200"></div>
+					<div class="mb-2 h-6 w-3/4 rounded bg-slate-200"></div>
+					<div class="h-4 w-1/2 rounded bg-slate-200"></div>
 				</div>
 			{/each}
 		</div>
@@ -90,15 +90,15 @@
 		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 			{#each posts.filter((post) => !selectedCategory || post.category === selectedCategory) as post}
 				<article
-					class="overflow-hidden rounded-lg bg-white shadow-md transition-transform hover:scale-[1.02] dark:bg-gray-800"
+					class="overflow-hidden rounded-lg bg-white shadow-md transition-transform hover:scale-[1.02]"
 				>
 					{#if post.image}
 						<img src={post.image} alt={post.title} class="h-48 w-full object-cover" />
 					{/if}
 					<div class="p-6">
-						<div class="mb-2 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+						<div class="mb-2 flex items-center gap-2 text-sm text-slate-500">
 							<span
-								class="inline-flex items-center rounded-full bg-teal-100 px-2.5 py-0.5 text-xs font-medium text-teal-800 dark:bg-teal-800 dark:text-teal-100"
+								class="bg-cardinal-100 text-cardinal-800 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
 							>
 								{categories.find((c) => c.id === post.category)?.name}
 							</span>
@@ -106,15 +106,15 @@
 								{new Date(post.publishedAt).toLocaleDateString()}
 							</time>
 						</div>
-						<h2 class="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
+						<h2 class="mb-2 text-xl font-semibold text-slate-900">
 							{post.title}
 						</h2>
-						<p class="mb-4 text-gray-600 dark:text-gray-300">
+						<p class="mb-4 text-slate-600">
 							{post.summary}
 						</p>
 						<a
 							href={`/news/${post.slug}`}
-							class="inline-flex items-center text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300"
+							class="text-cardinal-600 hover:text-cardinal-700 inline-flex items-center"
 						>
 							Read more
 							<svg class="ml-1 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">

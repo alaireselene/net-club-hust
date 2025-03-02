@@ -1,5 +1,6 @@
 <script lang="ts">
 	import EventCard from '$lib/components/EventCard.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -7,14 +8,7 @@
 
 <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 	<div class="space-y-8">
-		<div>
-			<h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
-				Events
-			</h1>
-			<p class="mt-2 text-lg text-slate-600 dark:text-slate-400">
-				Join our upcoming research club events and activities
-			</p>
-		</div>
+		<PageHeader title="Events" subtitle="Join our upcoming research club events and activities" />
 
 		{#if data.events.length > 0}
 			<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

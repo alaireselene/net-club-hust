@@ -1,38 +1,30 @@
-import { db } from '$lib/server/db';
-import { event, eventTranslation } from '$lib/server/db/schema';
-import { desc, eq, and, gte, isNotNull } from 'drizzle-orm';
-
-export async function load({ locals }) {
-  const { locale } = locals;
-
-  const events = await db
-    .select({
-      id: event.id,
-      slug: event.slug,
-      startDate: event.startDate,
-      endDate: event.endDate,
-      featured: event.featured,
+export async function load() {
+  const events = [
+    {
+      id: 'evt_1',
+      slug: 'ai-workshop-series-2025',
+      startDate: new Date('2025-04-15T09:00:00'),
+      endDate: new Date('2025-04-15T17:00:00'),
+      featured: true,
       translation: {
-        title: eventTranslation.title,
-        summary: eventTranslation.summary,
-        location: eventTranslation.location
+        title: 'AI Workshop Series 2025',
+        summary: 'Join our hands-on workshop series covering the latest developments in artificial intelligence and machine learning',
+        location: 'Innovation Lab'
       }
-    })
-    .from(event)
-    .leftJoin(
-      eventTranslation,
-      and(
-        eq(event.id, eventTranslation.eventId),
-        eq(eventTranslation.locale, locale)
-      )
-    )
-    .where(
-      and(
-        isNotNull(event.publishedAt),
-        gte(event.endDate, new Date())
-      )
-    )
-    .orderBy(desc(event.startDate));
+    },
+    {
+      id: 'evt_2',
+      slug: 'research-symposium-2025',
+      startDate: new Date('2025-04-20T09:00:00'),
+      endDate: new Date('2025-04-22T17:00:00'),
+      featured: true,
+      translation: {
+        title: 'Student Research Symposium 2025',
+        summary: 'Annual research symposium showcasing student projects and innovations across multiple disciplines',
+        location: 'Main Auditorium'
+      }
+    }
+  ];
 
   return {
     events

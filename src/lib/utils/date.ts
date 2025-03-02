@@ -8,13 +8,13 @@ export function formatDate(date: number | Date): string {
 }
 
 export function formatDatetime(timestamp: number): string {
-  return new Date(timestamp).toLocaleString('vi-VN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  const date = new Date(timestamp);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes} ${day}/${month}/${year}`;
 }
 
 export function formatTime(timestamp: number): string {
