@@ -1,472 +1,251 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import * as d3 from 'd3';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
-	interface NodeInfo {
-		name: string;
-		leader: string;
-		advisors: string[];
-		members: number;
-		description: string;
-	}
-
-	interface CustomNode extends d3.SimulationNodeDatum {
-		id: string;
-		group: number; // 1: School of ICT, 2: School of Mathematics, 3: Others
-		school: string;
-		info: NodeInfo;
-		x?: number;
-		y?: number;
-	}
-
-	interface CustomLink extends d3.SimulationLinkDatum<CustomNode> {
-		value: number;
-		source: CustomNode | string;
-		target: CustomNode | string;
-	}
-
-	let svgContainer: SVGSVGElement;
-	let selectedNode: CustomNode | null = null;
-	let width = 800;
-	let height = 600;
-
-	const nodes: CustomNode[] = [
-		// Khoa Toán - Tin
+	// Mock data for schools/faculties and their clubs
+	const networkData = [
 		{
-			id: 'MathClubA',
-			group: 2,
-			school: 'Khoa Toán - Tin',
-			info: {
-				name: 'CLB Toán học',
-				leader: 'Nguyễn Văn A',
-				advisors: ['TS. Trần Minh Triết', 'ThS. Lê Thu Hà'],
-				members: 45,
-				description: 'Câu lạc bộ nghiên cứu về toán học ứng dụng và khoa học dữ liệu'
-			}
-		},
-		{
-			id: 'MathClubB',
-			group: 2,
-			school: 'Khoa Toán - Tin',
-			info: {
-				name: 'CLB Tin học',
-				leader: 'Trần Thị B',
-				advisors: ['PGS.TS. Phạm Đức Thắng'],
-				members: 38,
-				description: 'Câu lạc bộ chuyên về lập trình và giải thuật'
-			}
-		},
-
-		// Trường CNTT & TT
-		{
-			id: 'GDGoC',
-			group: 1,
-			school: 'Trường CNTT & TT',
-			info: {
-				name: 'GDGoC - HUST',
-				leader: 'Lê Văn C',
-				advisors: ['TS. Nguyễn Quốc Bình', 'ThS. Lê Thanh Tùng'],
-				members: 42,
-				description: 'Game Development Club of HUST, phát triển game và ứng dụng đa phương tiện'
-			}
-		},
-		{
-			id: 'BKAI',
-			group: 1,
-			school: 'Trường CNTT & TT',
-			info: {
-				name: 'BKAI Lab',
-				leader: 'Phạm Thị D',
-				advisors: ['GS.TS. Hoàng Xuân Huấn', 'TS. Nguyễn Thị Phương'],
-				members: 50,
-				description: 'Phòng thí nghiệm về AI và học máy của Trường CNTT & TT'
-			}
-		},
-
-		// Khác
-		{
-			id: 'BKE',
-			group: 3,
-			school: 'Khác',
-			info: {
-				name: 'Trung tâm Sáng tạo và Khởi nghiệp Sinh viên',
-				leader: 'TS. Trương Công Tuấn',
-				advisors: ['PGS.TS. Lương Xuân Điển', 'Phạm Hoài Anh'],
-				members: 15,
-				description: 'Trung tâm Đổi mới Sáng tạo và Khởi nghiệp Sinh viên'
-			}
-		}
-	];
-
-	const links: CustomLink[] = [
-		{ source: 'BKE', target: 'MathClubB', value: 1 },
-		{ source: 'BKE', target: 'BKAI', value: 1 },
-		{ source: 'BKE', target: 'GDGoC', value: 1 },
-		{ source: 'BKE', target: 'MathClubA', value: 1 }
-	];
-
-	onMount(() => {
-		const svg = d3
-			.select(svgContainer)
-			.attr('viewBox', `0 0 ${width} ${height}`)
-			.attr('class', 'bg-slate-50 dark:bg-slate-900 rounded-lg shadow-lg');
-
-		const zoomToFit = () => {
-			const bounds = {
-				minX: Infinity,
-				minY: Infinity,
-				maxX: -Infinity,
-				maxY: -Infinity
-			};
-
-			// Calculate bounds
-			nodes.forEach((node) => {
-				if (node.x && node.y) {
-					bounds.minX = Math.min(bounds.minX, node.x);
-					bounds.minY = Math.min(bounds.minY, node.y);
-					bounds.maxX = Math.max(bounds.maxX, node.x);
-					bounds.maxY = Math.max(bounds.maxY, node.y);
+			id: 1,
+			name: 'Trường CNTT&TT',
+			shortName: 'SOICT',
+			clubs: [
+				{
+					id: 101,
+					name: 'Data Science Club',
+					description: 'Nghiên cứu phân tích dữ liệu và học máy',
+					members: 45
+				},
+				{
+					id: 102,
+					name: 'Web Development Hub',
+					description: 'Phát triển ứng dụng web hiện đại',
+					members: 38
 				}
-			});
+			]
+		},
+		{
+			id: 2,
+			name: 'Trường Hóa & KHSS',
+			shortName: 'SCLS',
+			clubs: [
+				{
+					id: 201,
+					name: 'Green Chemistry Club',
+					description: 'Nghiên cứu quy trình hóa học bền vững',
+					members: 32
+				}
+			]
+		},
+		{
+			id: 3,
+			name: 'Trường Cơ khí',
+			shortName: 'SME',
+			clubs: [
+				{
+					id: 301,
+					name: 'Robotics Research Club',
+					description: 'Nghiên cứu robot và tự động hóa nâng cao',
+					members: 50
+				},
+				{
+					id: 302,
+					name: 'CAD/CAM Innovation',
+					description: 'Công nghệ sản xuất số',
+					members: 28
+				}
+			]
+		},
+		{
+			id: 4,
+			name: 'Trường Điện-Điện tử',
+			shortName: 'SEEE',
+			clubs: [
+				{
+					id: 401,
+					name: 'Renewable Energy Club',
+					description: 'Nghiên cứu giải pháp năng lượng bền vững',
+					members: 40
+				}
+			]
+		},
+		{
+			id: 5,
+			name: 'Trường Vật liệu',
+			shortName: 'SMSE',
+			clubs: [
+				{
+					id: 501,
+					name: 'Materials Science Society',
+					description: 'Thúc đẩy nghiên cứu và phát triển vật liệu',
+					members: 35
+				}
+			]
+		},
+		{
+			id: 6,
+			name: 'Trường Kinh tế',
+			shortName: 'SEM',
+			clubs: [
+				{
+					id: 601,
+					name: 'Economics Research Group',
+					description: 'Phân tích xu hướng và chính sách kinh tế',
+					members: 25
+				}
+			]
+		},
+		{
+			id: 7,
+			name: 'Khoa Toán-Tin',
+			shortName: 'FAMI',
+			clubs: [
+				{
+					id: 701,
+					name: 'Mathematics Society',
+					description: 'Thúc đẩy nghiên cứu và giáo dục toán học',
+					members: 30
+				}
+			]
+		},
+		{
+			id: 8,
+			name: 'Khoa VLKT',
+			shortName: 'SEP',
+			clubs: [
+				{
+					id: 801,
+					name: 'Physics Club',
+					description: 'Khám phá các khái niệm vật lý cơ bản',
+					members: 20
+				}
+			]
+		},
+		{
+			id: 9,
+			name: 'Khoa Ngoại ngữ',
+			shortName: 'FOFL',
+			clubs: [
+				{
+					id: 901,
+					name: 'Language Exchange Club',
+					description: 'Thực hành kỹ năng ngoại ngữ',
+					members: 15
+				}
+			]
+		},
+		{
+			id: 10,
+			name: 'Khoa Khoa học & CNGD',
+			shortName: 'FED',
+			clubs: [
+				{
+					id: 1001,
+					name: 'Environmental Science Club',
+					description: 'Nghiên cứu các vấn đề và giải pháp môi trường',
+					members: 18
+				}
+			]
+		}
+	];
 
-			// Add padding
-			const padding = 40;
-			const dx = bounds.maxX - bounds.minX;
-			const dy = bounds.maxY - bounds.minY;
-			const x = (bounds.minX + bounds.maxX) / 2;
-			const y = (bounds.minY + bounds.maxY) / 2;
+	// Get school filter from URL query
+	$: schoolFilter = $page.url.searchParams.get('school');
 
-			// Calculate scale to fit
-			const scale = 0.6 / Math.max(dx / width, dy / height);
-
-			svg
-				.transition()
-				.duration(750)
-				.call(
-					zoom.transform,
-					d3.zoomIdentity
-						.translate(width / 2, height / 2)
-						.scale(scale)
-						.translate(-x, -y)
-				);
-		};
-
-		const simulation = d3
-			.forceSimulation<CustomNode>(nodes)
-			.force(
-				'link',
-				d3.forceLink<CustomNode, CustomLink>(links).id((d) => d.id)
+	// Filter schools based on URL query
+	$: filteredData = schoolFilter
+		? networkData.filter(
+				(school) =>
+					school.shortName.toLowerCase() === schoolFilter.toLowerCase() ||
+					school.id.toString() === schoolFilter
 			)
-			.force('charge', d3.forceManyBody().strength(-400))
-			.force('center', d3.forceCenter(width / 2, height / 2))
-			.force(
-				'x',
-				d3
-					.forceX<CustomNode>()
-					.strength(0.1)
-					.x((d) => {
-						switch (d.group) {
-							case 1:
-								return width * 0.3;
-							case 2:
-								return width * 0.7;
-							default:
-								return width * 0.5;
-						}
-					})
-			)
-			.force(
-				'y',
-				d3
-					.forceY<CustomNode>()
-					.strength(0.1)
-					.y((d) => {
-						switch (d.group) {
-							case 1:
-								return height * 0.3;
-							case 2:
-								return height * 0.3;
-							default:
-								return height * 0.7;
-						}
-					})
-			);
+		: networkData;
 
-		const defs = svg.append('defs');
-		const pattern = defs
-			.append('pattern')
-			.attr('id', 'vietnamesePattern')
-			.attr('width', 20)
-			.attr('height', 20)
-			.attr('patternUnits', 'userSpaceOnUse');
+	// Handle school filter click
+	function filterBySchool(school: { id: number; shortName: string }) {
+		goto(`?school=${school.shortName}`);
+	}
 
-		pattern
-			.append('path')
-			.attr('d', 'M0,10 L20,10 M10,0 L10,20')
-			.attr('stroke', 'rgba(220, 38, 38, 0.1)')
-			.attr('stroke-width', 1);
-
-		svg
-			.append('rect')
-			.attr('width', width)
-			.attr('height', height)
-			.attr('fill', 'url(#vietnamesePattern)');
-
-		const link = svg
-			.append('g')
-			.attr('class', 'links')
-			.selectAll<SVGLineElement, CustomLink>('line')
-			.data(links)
-			.join('line')
-			.attr('stroke', '#64748b')
-			.attr('stroke-opacity', 0.6)
-			.attr('stroke-width', (d) => Math.sqrt(d.value));
-
-		const dragBehavior = drag(simulation);
-
-		const nodeGroup = svg
-			.append('g')
-			.attr('class', 'nodes')
-			.selectAll<SVGGElement, CustomNode>('g')
-			.data(nodes)
-			.join('g')
-			.call((selection) => {
-				(dragBehavior as any)(selection);
-			})
-			.on('click', (_event, d: CustomNode) => {
-				handleNodeClick(d);
-			});
-
-		const getNodeColor = (d: CustomNode) => {
-			switch (d.group) {
-				case 1:
-					return '#0ea5e9';
-				case 2:
-					return '#10b981';
-				default:
-					return '#6366f1';
-			}
-		};
-
-		const circles = nodeGroup
-			.append('circle')
-			.attr('r', 8)
-			.attr('fill', getNodeColor)
-			.attr('stroke', '#fff')
-			.attr('stroke-width', 2)
-			.on('mouseover', function () {
-				d3.select(this).transition().duration(200).attr('r', 12);
-			})
-			.on('mouseout', function (event, d: CustomNode) {
-				d3.select(this)
-					.transition()
-					.duration(200)
-					.attr('r', selectedNode && (d.id === selectedNode.id || isConnectedNode(d)) ? 10 : 8);
-			});
-
-		const labels = nodeGroup
-			.append('text')
-			.text((d) => {
-				const name = d.info.name;
-				// For clubs, take the first part before "-" or limit to 15 chars
-				return name.includes('-') ? name.split('-')[0].trim() : name.slice(0, 15);
-			})
-			.attr('x', 12)
-			.attr('y', 4)
-			.attr('class', 'text-sm fill-slate-700 dark:fill-slate-300')
-			.style('font-size', '10px')
-			.style('pointer-events', 'none');
-
-		function handleNodeClick(node: CustomNode) {
-			selectedNode = node;
-
-			circles.attr('r', 8).attr('fill-opacity', 0.5).attr('stroke-opacity', 0.5);
-			link.attr('stroke-opacity', 0.2);
-			labels.attr('opacity', 0.5);
-
-			circles
-				.filter((d: CustomNode) => d.id === node.id || isConnectedNode(d))
-				.attr('r', 10)
-				.attr('fill-opacity', 1)
-				.attr('stroke-opacity', 1);
-
-			link
-				.filter((d: CustomLink) => d.source === node || d.target === node)
-				.attr('stroke-opacity', 1);
-
-			labels.filter((d: CustomNode) => d.id === node.id || isConnectedNode(d)).attr('opacity', 1);
-
-			const transform = d3.zoomTransform(svg.node()!);
-			const scale = transform.k;
-			const x = width / 2 - (node.x || 0) * scale;
-			const y = height / 2 - (node.y || 0) * scale;
-
-			svg
-				.transition()
-				.duration(750)
-				.call(zoom.transform, d3.zoomIdentity.translate(x, y).scale(scale));
-		}
-
-		function isConnectedNode(node: CustomNode): boolean {
-			if (!selectedNode) return false;
-			return links.some(
-				(link) =>
-					(link.source === selectedNode && link.target === node) ||
-					(link.target === selectedNode && link.source === node)
-			);
-		}
-
-		simulation
-			.on('tick', () => {
-				link
-					.attr('x1', (d) => (d.source as CustomNode).x!)
-					.attr('y1', (d) => (d.source as CustomNode).y!)
-					.attr('x2', (d) => (d.target as CustomNode).x!)
-					.attr('y2', (d) => (d.target as CustomNode).y!);
-
-				nodeGroup.attr('transform', (d) => `translate(${d.x},${d.y})`);
-			})
-			.on('end', zoomToFit);
-
-		const zoom = d3
-			.zoom<SVGSVGElement, unknown>()
-			.scaleExtent([0.2, 3])
-			.on('zoom', (event) => {
-				svg.selectAll('.nodes, .links').attr('transform', event.transform);
-			});
-
-		svg.call(zoom);
-	});
-
-	function drag(simulation: d3.Simulation<CustomNode, undefined>) {
-		function dragstarted(event: d3.D3DragEvent<SVGGElement, CustomNode, CustomNode>) {
-			if (!event.active) simulation.alphaTarget(0.3).restart();
-			event.subject.fx = event.subject.x;
-			event.subject.fy = event.subject.y;
-		}
-
-		function dragged(event: d3.D3DragEvent<SVGGElement, CustomNode, CustomNode>) {
-			event.subject.fx = event.x;
-			event.subject.fy = event.y;
-		}
-
-		function dragended(event: d3.D3DragEvent<SVGGElement, CustomNode, CustomNode>) {
-			if (!event.active) simulation.alphaTarget(0);
-			event.subject.fx = null;
-			event.subject.fy = null;
-		}
-
-		return d3
-			.drag<SVGGElement, CustomNode>()
-			.on('start', dragstarted)
-			.on('drag', dragged)
-			.on('end', dragended);
+	// Handle club click
+	function navigateToClub(clubId: number) {
+		goto(`/network/${clubId}`);
 	}
 </script>
 
-<div class="p-6">
-	<h1 class="mb-6 text-3xl font-bold text-slate-900 dark:text-white">
-		Mạng lưới Câu lạc bộ Nghiên cứu
-	</h1>
+<PageHeader title="Mạng lưới thành viên" />
 
-	<div class="mb-6">
-		<p class="text-slate-600 dark:text-slate-300">
-			Biểu đồ tương tác thể hiện mối quan hệ giữa các câu lạc bộ nghiên cứu theo khoa và trường.
-			Nhấp vào một nút để xem thông tin chi tiết và các kết nối liên quan.
-		</p>
+<div class="container mx-auto px-4 py-8">
+	<!-- School filters -->
+	<div class="mb-6 flex flex-wrap gap-2">
+		<button
+			class="rounded-lg px-4 py-2 text-sm font-medium transition-colors
+        {!schoolFilter
+				? 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-100'
+				: 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'}"
+			on:click={() => goto('/network')}
+		>
+			Toàn bộ
+		</button>
+		{#each networkData as school}
+			<button
+				class="rounded-lg px-4 py-2 text-sm font-medium transition-colors
+          {schoolFilter === school.shortName
+					? 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-100'
+					: 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'}"
+				on:click={() => filterBySchool(school)}
+			>
+				{school.shortName}
+			</button>
+		{/each}
 	</div>
 
-	<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-		<div
-			class="relative rounded-lg bg-white p-4 shadow-lg lg:col-span-2 dark:bg-slate-800"
-			style="height: 600px;"
-		>
-			<svg
-				bind:this={svgContainer}
-				width="100%"
-				height="100%"
-				class="h-full max-w-full cursor-move"
-			/>
+	<div class="grid gap-8">
+		{#each filteredData as school}
+			<div class="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
+				<div class="mb-4">
+					<h2 class="flex items-center gap-3 text-2xl font-semibold text-gray-800 dark:text-white">
+						<span
+							class="rounded bg-teal-100 px-2 py-1 font-mono text-sm text-teal-800 dark:bg-teal-900 dark:text-teal-100"
+						>
+							{school.shortName}
+						</span>
+						<span>{school.name}</span>
+					</h2>
+				</div>
 
-			<div
-				class="absolute right-4 bottom-4 rounded-lg bg-white/80 p-3 shadow-lg backdrop-blur-sm dark:bg-slate-800/80"
-			>
-				<h2 class="mb-2 text-sm font-semibold text-slate-900 dark:text-white">Chú thích</h2>
-				<div class="space-y-2">
-					<div class="flex items-center">
-						<span class="mr-2 h-3 w-3 rounded-full bg-[#0ea5e9]"></span>
-						<span class="text-xs text-slate-600 dark:text-slate-300">Trường CNTT & TT</span>
-					</div>
-					<div class="flex items-center">
-						<span class="mr-2 h-3 w-3 rounded-full bg-[#10b981]"></span>
-						<span class="text-xs text-slate-600 dark:text-slate-300">Khoa Toán - Tin</span>
-					</div>
-					<div class="flex items-center">
-						<span class="mr-2 h-3 w-3 rounded-full bg-[#6366f1]"></span>
-						<span class="text-xs text-slate-600 dark:text-slate-300">Khác</span>
-					</div>
+				<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+					{#each school.clubs as club}
+						<button
+							class="rounded-lg bg-gray-50 p-4 text-left transition-all hover:scale-105 hover:shadow-lg focus:ring-2 focus:ring-teal-500 focus:outline-none dark:bg-gray-700 dark:focus:ring-teal-400"
+							on:click={() => navigateToClub(club.id)}
+						>
+							<h3 class="mb-2 text-lg font-semibold text-gray-800 dark:text-white">
+								{club.name}
+							</h3>
+							<p class="mb-3 text-sm text-gray-600 dark:text-gray-300">
+								{club.description}
+							</p>
+							<div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="mr-1 h-4 w-4"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<circle cx="12" cy="12" r="10" />
+									<circle cx="12" cy="10" r="3" />
+									<path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855" />
+								</svg>
+								<span>{club.members} thành viên</span>
+							</div>
+						</button>
+					{/each}
 				</div>
 			</div>
-		</div>
-
-		<div class="rounded-lg bg-white p-6 shadow-lg dark:bg-slate-800">
-			{#if selectedNode}
-				<div class="space-y-6">
-					<div class="border-b border-slate-200 pb-4 dark:border-slate-700">
-						<div class="mb-2">
-							<p class="text-sm font-medium text-slate-500 dark:text-slate-400">
-								{selectedNode.school}
-							</p>
-							<h2 class="text-xl font-semibold text-slate-900 dark:text-white">
-								{selectedNode.info.name}
-							</h2>
-						</div>
-						<div class="space-y-3">
-							<div>
-								<h3 class="text-sm font-medium text-slate-700 dark:text-slate-300">Chủ nhiệm</h3>
-								<p class="text-slate-600 dark:text-slate-400">{selectedNode.info.leader}</p>
-							</div>
-
-							<div>
-								<h3 class="text-sm font-medium text-slate-700 dark:text-slate-300">Ban cố vấn</h3>
-								<ul class="list-inside list-disc text-slate-600 dark:text-slate-400">
-									{#each selectedNode.info.advisors as advisor}
-										<li>{advisor}</li>
-									{/each}
-								</ul>
-							</div>
-
-							<div>
-								<h3 class="text-sm font-medium text-slate-700 dark:text-slate-300">
-									Số thành viên
-								</h3>
-								<p class="text-slate-600 dark:text-slate-400">{selectedNode.info.members}</p>
-							</div>
-						</div>
-					</div>
-
-					<div>
-						<h3 class="mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Giới thiệu</h3>
-						<p class="leading-relaxed text-slate-600 dark:text-slate-400">
-							{selectedNode.info.description}
-						</p>
-					</div>
-				</div>
-			{:else}
-				<div class="py-8 text-center text-slate-500 dark:text-slate-400">
-					<p>Chọn một nút trên biểu đồ để xem thông tin chi tiết</p>
-				</div>
-			{/if}
-		</div>
+		{/each}
 	</div>
 </div>
-
-<style>
-	.backdrop-blur-sm {
-		transition: opacity 0.2s ease-in-out;
-	}
-
-	.backdrop-blur-sm:hover {
-		opacity: 0.9;
-	}
-</style>

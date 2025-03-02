@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { fade, scale } from 'svelte/transition';
+	import PageHeader from '$lib/components/PageHeader.svelte';
 
 	let searchQuery = '';
 	let selectedFileType = 'all';
@@ -104,7 +105,7 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <div class="container mx-auto max-w-7xl px-4 py-8 sm:px-6">
-	<h1 class="mb-8 text-2xl font-bold text-slate-800 sm:text-3xl">Tài Nguyên Nghiên Cứu</h1>
+	<PageHeader title="Tài nguyên" subtitle="Tài liệu và công cụ hỗ trợ nghiên cứu" />
 
 	<!-- Search and Filter Section -->
 	<div class="mb-8 flex flex-wrap items-center gap-4">
@@ -123,7 +124,7 @@
 			>
 				{#each fileTypes as type}
 					<option value={type}>
-						{type === 'all' ? 'Tất cả định dạng' : type}
+						{type === 'all' ? 'Định dạng' : type}
 					</option>
 				{/each}
 			</select>
@@ -135,7 +136,7 @@
 			>
 				{#each categories as category}
 					<option value={category}>
-						{category === 'all' ? 'Tất cả danh mục' : category}
+						{category === 'all' ? 'Danh mục' : category}
 					</option>
 				{/each}
 			</select>
@@ -146,32 +147,34 @@
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each filteredResources as resource}
 			<div
-				class="cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg"
+				class="min-h-[20rem] cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg"
 				on:click={() => openModal(resource)}
 				on:keypress={(e) => e.key === 'Enter' && openModal(resource)}
 				tabindex="0"
 				role="button"
 			>
-				<div class="space-y-4 p-6">
-					<div class="flex items-start justify-between">
-						<div class="flex items-center space-x-2">
-							<span class="rounded bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
-								{resource.type}
-							</span>
-							<span class="text-xs text-slate-500">{resource.size}</span>
+				<div class="flex h-full flex-col p-6">
+					<div class="grow space-y-4">
+						<div class="flex items-start justify-between">
+							<div class="flex items-center space-x-2">
+								<span class="rounded bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
+									{resource.type}
+								</span>
+								<span class="text-xs text-slate-500">{resource.size}</span>
+							</div>
+							<span class="text-xs text-slate-500">{resource.downloadCount} lượt tải</span>
 						</div>
-						<span class="text-xs text-slate-500">{resource.downloadCount} lượt tải</span>
+
+						<h3 class="line-clamp-2 text-lg font-medium text-slate-800">
+							{resource.title}
+						</h3>
+
+						<p class="line-clamp-2 text-sm text-slate-600">
+							{resource.description}
+						</p>
 					</div>
 
-					<h3 class="line-clamp-2 text-lg font-medium text-slate-800">
-						{resource.title}
-					</h3>
-
-					<p class="line-clamp-2 text-sm text-slate-600">
-						{resource.description}
-					</p>
-
-					<div class="flex items-center justify-between pt-4">
+					<div class="mt-4 flex items-center justify-between border-t pt-4">
 						<span class="text-xs text-slate-500">
 							Cập nhật: {resource.updatedAt}
 						</span>

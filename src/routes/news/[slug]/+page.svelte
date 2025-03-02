@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-
 	const post = {
 		id: '1',
 		slug: 'new-research-lab-opening',
@@ -44,7 +42,7 @@
 			<span
 				class="inline-flex items-center rounded-full bg-teal-100 px-2.5 py-0.5 text-xs font-medium text-teal-800 dark:bg-teal-800 dark:text-teal-100"
 			>
-				Research
+				Nghiên cứu
 			</span>
 			<time datetime={post.publishedAt}>
 				{new Date(post.publishedAt).toLocaleDateString()}
@@ -54,7 +52,7 @@
 			{post.title}
 		</h1>
 		<p class="text-gray-500 dark:text-gray-400">
-			By {post.author}
+			Tác giả {post.author}
 		</p>
 	</header>
 
@@ -83,7 +81,7 @@
 			<svg class="mr-1 h-4 w-4 rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 			</svg>
-			Back to News
+			Quay lại Tin tức
 		</a>
 	</div>
 </article>

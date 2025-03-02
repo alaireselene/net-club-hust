@@ -2,9 +2,9 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 
 	let categories = [
-		{ id: 'research', name: 'Research' },
-		{ id: 'events', name: 'Events' },
-		{ id: 'announcements', name: 'Announcements' }
+		{ id: 'research', name: 'Nghiên cứu' },
+		{ id: 'events', name: 'Sự kiện' },
+		{ id: 'announcements', name: 'Thông báo' }
 	];
 
 	let selectedCategory: string | null = null;
@@ -44,10 +44,7 @@
 </script>
 
 <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-	<PageHeader
-		title="Latest News"
-		subtitle="Stay updated with the latest from our research community"
-	/>
+	<PageHeader title="Tin tức" subtitle="Các tin tức mới nhất" />
 
 	<!-- Categories -->
 	<nav class="mb-8">
@@ -59,7 +56,7 @@
 					: 'bg-slate-100 text-slate-700 hover:bg-slate-200'}"
 				on:click={() => (selectedCategory = null)}
 			>
-				All Categories
+				Toàn bộ
 			</button>
 			{#each categories as category}
 				<button
@@ -90,33 +87,35 @@
 		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 			{#each posts.filter((post) => !selectedCategory || post.category === selectedCategory) as post}
 				<article
-					class="overflow-hidden rounded-lg bg-white shadow-md transition-transform hover:scale-[1.02]"
+					class="flex min-h-[24rem] flex-col overflow-hidden rounded-lg bg-white shadow-md transition-transform hover:scale-[1.02]"
 				>
 					{#if post.image}
 						<img src={post.image} alt={post.title} class="h-48 w-full object-cover" />
 					{/if}
-					<div class="p-6">
-						<div class="mb-2 flex items-center gap-2 text-sm text-slate-500">
-							<span
-								class="bg-cardinal-100 text-cardinal-800 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
-							>
-								{categories.find((c) => c.id === post.category)?.name}
-							</span>
-							<time datetime={post.publishedAt}>
-								{new Date(post.publishedAt).toLocaleDateString()}
-							</time>
+					<div class="flex grow flex-col p-6">
+						<div class="grow">
+							<div class="mb-2 flex items-center gap-2 text-sm text-slate-500">
+								<span
+									class="bg-cardinal-100 text-cardinal-800 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
+								>
+									{categories.find((c) => c.id === post.category)?.name}
+								</span>
+								<time datetime={post.publishedAt}>
+									{new Date(post.publishedAt).toLocaleDateString()}
+								</time>
+							</div>
+							<h2 class="mb-2 text-xl font-semibold text-slate-900">
+								{post.title}
+							</h2>
+							<p class="text-slate-600">
+								{post.summary}
+							</p>
 						</div>
-						<h2 class="mb-2 text-xl font-semibold text-slate-900">
-							{post.title}
-						</h2>
-						<p class="mb-4 text-slate-600">
-							{post.summary}
-						</p>
 						<a
 							href={`/news/${post.slug}`}
-							class="text-cardinal-600 hover:text-cardinal-700 inline-flex items-center"
+							class="text-cardinal-600 hover:text-cardinal-700 mt-4 inline-flex items-center"
 						>
-							Read more
+							Đọc tiếp
 							<svg class="ml-1 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
 								<path
 									stroke-linecap="round"

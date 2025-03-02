@@ -8,7 +8,7 @@
 
 <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 	<div class="space-y-8">
-		<PageHeader title="Events" subtitle="Join our upcoming research club events and activities" />
+		<PageHeader title="Sự kiện" subtitle="Các sự kiện được tổ chức bởi Thành viên Mạng lưới" />
 
 		{#if data.events.length > 0}
 			<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

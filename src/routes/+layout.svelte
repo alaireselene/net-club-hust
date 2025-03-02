@@ -4,9 +4,155 @@
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/state';
 	import Breadcrumb from '$lib/components/Breadcrumb.svelte';
+	import { id } from 'date-fns/locale';
 
 	let mobileMenuOpen = $state(false);
 	let currentLang = $state('VI');
+
+	const networkData = [
+		{
+			id: 1,
+			name: 'Trường CNTT&TT',
+			shortName: 'SOICT',
+			clubs: [
+				{
+					id: 101,
+					name: 'Data Science Club',
+					description: 'Exploring data analytics and machine learning',
+					members: 45
+				},
+				{
+					id: 102,
+					name: 'Web Development Hub',
+					description: 'Building modern web applications',
+					members: 38
+				}
+			]
+		},
+		{
+			id: 2,
+			name: 'Trường Hóa & KHSS',
+			shortName: 'SCLS',
+			clubs: [
+				{
+					id: 201,
+					name: 'Green Chemistry Club',
+					description: 'Sustainable chemical processes research',
+					members: 32
+				}
+			]
+		},
+		{
+			id: 3,
+			name: 'Trường Cơ khí',
+			shortName: 'SME',
+			clubs: [
+				{
+					id: 301,
+					name: 'Robotics Research Club',
+					description: 'Advanced robotics and automation',
+					members: 50
+				},
+				{
+					id: 302,
+					name: 'CAD/CAM Innovation',
+					description: 'Digital manufacturing technologies',
+					members: 28
+				}
+			]
+		},
+		{
+			id: 4,
+			name: 'Trường Điện-Điện tử',
+			shortName: 'SEEE',
+			clubs: [
+				{
+					id: 401,
+					name: 'Renewable Energy Club',
+					description: 'Sustainable energy solutions research',
+					members: 40
+				}
+			]
+		},
+		{
+			id: 5,
+			name: 'Trường Vật liệu',
+			shortName: 'SMSE',
+			clubs: [
+				{
+					id: 501,
+					name: 'Materials Science Society',
+					description: 'Advancing materials research and development',
+					members: 35
+				}
+			]
+		},
+		{
+			id: 6,
+			name: 'Trường Kinh tế',
+			shortName: 'SEM',
+			clubs: [
+				{
+					id: 601,
+					name: 'Economics Research Group',
+					description: 'Analyzing economic trends and policies',
+					members: 25
+				}
+			]
+		},
+		{
+			id: 7,
+			name: 'Khoa Toán-Tin',
+			shortName: 'FAMI',
+			clubs: [
+				{
+					id: 701,
+					name: 'Mathematics Society',
+					description: 'Promoting mathematical research and education',
+					members: 30
+				}
+			]
+		},
+		{
+			id: 8,
+			name: 'Khoa VLKT',
+			shortName: 'SEP',
+			clubs: [
+				{
+					id: 801,
+					name: 'Physics Club',
+					description: 'Exploring fundamental physics concepts',
+					members: 20
+				}
+			]
+		},
+		{
+			id: 9,
+			name: 'Khoa Ngoại ngữ',
+			shortName: 'FOFL',
+			clubs: [
+				{
+					id: 901,
+					name: 'Language Exchange Club',
+					description: 'Practicing foreign language skills',
+					members: 15
+				}
+			]
+		},
+		{
+			id: 10,
+			name: 'Khoa Khoa học & CNGD',
+			shortName: 'FED',
+			clubs: [
+				{
+					id: 1001,
+					name: 'Environmental Science Club',
+					description: 'Studying environmental issues and solutions',
+					members: 18
+				}
+			]
+		}
+	];
 
 	function toggleMobileMenu() {
 		mobileMenuOpen = !mobileMenuOpen;
@@ -150,7 +296,85 @@
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div class="hidden h-14 items-center justify-between md:flex">
 				<div class="flex flex-1 items-center justify-between space-x-8">
-					{#each [{ href: '/about', text: 'Giới thiệu' }, { href: '/news', text: 'Tin tức' }, { href: '/events', text: 'Sự kiện nổi bật' }, { href: '/network', text: 'Mạng lưới' }, { href: '/resources', text: 'Tài nguyên' }, { href: '/facilities', text: 'Cơ sở vật chất' }] as { href, text }}
+					{#each [{ href: '/about', text: 'Giới thiệu' }, { href: '/news', text: 'Tin tức' }, { href: '/events', text: 'Sự kiện nổi bật' }] as { href, text }}
+						<a
+							{href}
+							class="hover:text-cardinal-600 focus:ring-cardinal-600 text-slate-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none {page
+								.url.pathname === href
+								? 'text-cardinal-600 font-medium'
+								: ''}"
+							aria-current={page.url.pathname === href ? 'page' : undefined}
+						>
+							{text}
+						</a>
+					{/each}
+
+					<!-- Network Dropdown -->
+					<div class="group relative">
+						<button
+							class="hover:text-cardinal-600 focus:ring-cardinal-600 flex items-center text-slate-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none {page.url.pathname.startsWith(
+								'/network'
+							)
+								? 'text-cardinal-600 font-medium'
+								: ''}"
+							aria-haspopup="true"
+						>
+							<span>Mạng lưới</span>
+							<svg
+								class="ml-1 h-4 w-4 transform transition-transform group-hover:rotate-180"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M19 9l-7 7-7-7"
+								/>
+							</svg>
+						</button>
+						<!-- Schools Dropdown Menu -->
+						<div
+							class="invisible absolute left-0 z-50 mt-2 w-64 transform opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100"
+						>
+							<div class="ring-opacity-5 rounded-lg bg-white py-2 shadow-lg ring-1 ring-black">
+								{#each networkData as school}
+									<div class="group/school relative px-4 py-2 hover:bg-slate-50">
+										<a
+											href="/network?school={school.shortName}"
+											class="flex items-center justify-between"
+										>
+											<span class="text-sm text-slate-700">{school.name}</span>
+											<span
+												class="ml-2 rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"
+												>{school.shortName}</span
+											>
+										</a>
+										<!-- Clubs Submenu -->
+										<div
+											class="invisible absolute top-0 left-full ml-2 w-64 transform opacity-0 transition-all duration-200 group-hover/school:visible group-hover/school:opacity-100"
+										>
+											<div
+												class="ring-opacity-5 rounded-lg bg-white py-2 shadow-lg ring-1 ring-black"
+											>
+												{#each school.clubs as club}
+													<a
+														href="/network/{club.id}"
+														class="hover:text-cardinal-600 block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+													>
+														{club.name}
+													</a>
+												{/each}
+											</div>
+										</div>
+									</div>
+								{/each}
+							</div>
+						</div>
+					</div>
+
+					{#each [{ href: '/resources', text: 'Tài nguyên' }, { href: '/facilities', text: 'Cơ sở vật chất' }] as { href, text }}
 						<a
 							{href}
 							class="hover:text-cardinal-600 focus:ring-cardinal-600 text-slate-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none {page
@@ -184,14 +408,13 @@
 		class:translate-x-full={!mobileMenuOpen}
 		transition:slide={{ duration: 200 }}
 	>
-		<!-- Previous mobile menu content unchanged -->
 		<div
 			class="bg-opacity-75 absolute inset-0 bg-slate-600 transition-opacity"
 			onclick={toggleMobileMenu}
 			aria-hidden="true"
 		></div>
 		<div
-			class="absolute right-0 h-full w-64 transform bg-white shadow-xl transition-transform"
+			class="absolute right-0 h-full w-64 transform overflow-y-auto bg-white shadow-xl transition-transform"
 			role="dialog"
 			aria-modal="true"
 			aria-label="Mobile menu"
@@ -228,7 +451,8 @@
 						</a>
 					{/each}
 					<div class="my-4 border-t border-slate-200"></div>
-					{#each [{ href: '/about', text: 'Giới thiệu' }, { href: '/news', text: 'Tin tức' }, { href: '/events', text: 'Sự kiện nổi bật' }, { href: '/network', text: 'Mạng lưới' }, { href: '/resources', text: 'Tài nguyên' }, { href: '/facilities', text: 'Cơ sở vật chất' }] as { href, text }}
+
+					{#each [{ href: '/about', text: 'Giới thiệu' }, { href: '/news', text: 'Tin tức' }, { href: '/events', text: 'Sự kiện nổi bật' }] as { href, text }}
 						<a
 							{href}
 							class="hover:text-cardinal-600 block rounded-md px-3 py-2 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 {page
@@ -240,6 +464,50 @@
 							{text}
 						</a>
 					{/each}
+
+					<!-- Network Section in Mobile Menu -->
+					<div class="my-2">
+						<div class="px-3 py-2 text-base font-medium text-slate-700">Mạng lưới</div>
+						{#each networkData as school}
+							<div class="mb-3 ml-4">
+								<a
+									href="/network?school={school.shortName}"
+									class="hover:text-cardinal-600 block py-2 text-sm font-medium text-slate-600"
+								>
+									{school.name}
+									<span
+										class="ml-2 rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"
+									>
+										{school.shortName}
+									</span>
+								</a>
+								<div class="ml-4">
+									{#each school.clubs as club}
+										<a
+											href="/network/{club.id}"
+											class="hover:text-cardinal-600 block py-1.5 text-sm text-slate-600"
+										>
+											{club.name}
+										</a>
+									{/each}
+								</div>
+							</div>
+						{/each}
+					</div>
+
+					{#each [{ href: '/resources', text: 'Tài nguyên' }, { href: '/facilities', text: 'Cơ sở vật chất' }] as { href, text }}
+						<a
+							{href}
+							class="hover:text-cardinal-600 block rounded-md px-3 py-2 text-base font-medium text-slate-700 transition-colors hover:bg-slate-50 {page
+								.url.pathname === href
+								? 'text-cardinal-600 bg-slate-50'
+								: ''}"
+							aria-current={page.url.pathname === href ? 'page' : undefined}
+						>
+							{text}
+						</a>
+					{/each}
+
 					<a
 						href="https://student.hust.edu.vn"
 						target="_blank"

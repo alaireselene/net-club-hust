@@ -47,28 +47,6 @@
 
 	$: startDate = event.startDate instanceof Date ? event.startDate.getTime() : event.startDate;
 	$: endDate = event.endDate instanceof Date ? event.endDate.getTime() : event.endDate;
-
-	function shareOnFacebook() {
-		window.open(
-			`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`,
-			'_blank'
-		);
-	}
-
-	function shareOnTwitter() {
-		window.open(
-			`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-				window.location.href
-			)}&text=${encodeURIComponent(event.translation?.title ?? 'Event')}`,
-			'_blank'
-		);
-	}
-
-	function shareViaEmail() {
-		window.location.href = `mailto:?subject=${encodeURIComponent(
-			event.translation?.title ?? 'Event'
-		)}&body=${encodeURIComponent(`Check out this event: ${window.location.href}`)}`;
-	}
 </script>
 
 <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -87,10 +65,10 @@
 			<div class="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
 				<div class="space-y-6 lg:w-1/2">
 					<h1 class="text-3xl font-bold tracking-tight sm:text-4xl xl:text-5xl">
-						{event.translation?.title ?? 'Untitled Event'}
+						{event.translation?.title ?? 'Sự kiện Trống'}
 					</h1>
 					<p class="text-lg text-slate-200">
-						{event.translation?.summary ?? 'No description available'}
+						{event.translation?.summary ?? 'Không có mô tả'}
 					</p>
 				</div>
 				{#if event.imageUrl}
@@ -116,7 +94,7 @@
 					<div class="flex items-start gap-3 text-slate-600 dark:text-slate-400">
 						<Calendar class="h-5 w-5 text-teal-600 dark:text-teal-500" />
 						<div>
-							<span class="font-medium">Date & Time</span><br />
+							<span class="font-medium">Thời gian</span><br />
 							{formatDatetime(startDate)} - {formatDatetime(endDate)}
 						</div>
 					</div>
@@ -124,8 +102,8 @@
 					<div class="flex items-start gap-3 text-slate-600 dark:text-slate-400">
 						<MapPin class="h-5 w-5 text-teal-600 dark:text-teal-500" />
 						<div>
-							<span class="font-medium">Location</span><br />
-							{event.translation?.location ?? 'Location TBA'}
+							<span class="font-medium">Địa điểm</span><br />
+							{event.translation?.location ?? 'Chưa xác định'}
 						</div>
 					</div>
 
@@ -133,14 +111,14 @@
 						{#if event.isOnline}
 							<Globe class="h-5 w-5 text-teal-600 dark:text-teal-500" />
 							<div>
-								<span class="font-medium">Format</span><br />
-								Online Event
+								<span class="font-medium">Thể thức</span><br />
+								Trực tuyến
 							</div>
 						{:else}
 							<Users class="h-5 w-5 text-teal-600 dark:text-teal-500" />
 							<div>
-								<span class="font-medium">Format</span><br />
-								In-person Event
+								<span class="font-medium">Thể thức</span><br />
+								Trực tiếp
 							</div>
 						{/if}
 					</div>
@@ -157,7 +135,7 @@
 					<div
 						class="rounded-lg bg-slate-100 p-4 text-sm text-slate-600 dark:bg-slate-800 dark:text-slate-400"
 					>
-						<p>This content has been automatically translated and may not be 100% accurate.</p>
+						<p>Nội dung được tự động dịch bởi AI, chỉ mang tính tham khảo.</p>
 					</div>
 				{/if}
 			</div>
@@ -171,7 +149,7 @@
 					>
 						{#if event.host}
 							<div class="space-y-4">
-								<h3 class="text-base font-medium text-slate-900 dark:text-white">Event Host</h3>
+								<h3 class="text-base font-medium text-slate-900 dark:text-white">Điều phối viên</h3>
 								<div class="flex items-center gap-4">
 									{#if event.host.avatarUrl}
 										<img
@@ -192,7 +170,9 @@
 
 						{#if event.sponsors}
 							<div class="space-y-4">
-								<h3 class="text-base font-medium text-slate-900 dark:text-white">Event Sponsors</h3>
+								<h3 class="text-base font-medium text-slate-900 dark:text-white">
+									Được tài trợ bởi
+								</h3>
 								<div class="flex flex-wrap gap-4">
 									{#each event.sponsors as sponsor}
 										<div
@@ -226,7 +206,7 @@
 							rel="noopener noreferrer"
 							class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-teal-600 px-6 py-3 text-base font-medium text-white shadow-sm transition-colors hover:bg-teal-500 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:outline-none dark:hover:bg-teal-400"
 						>
-							Join Event
+							Đăng ký tham gia
 							<ExternalLink class="h-4 w-4" />
 						</a>
 					</div>

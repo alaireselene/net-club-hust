@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { format, startOfWeek, addDays, addWeeks, subWeeks } from 'date-fns';
 	import { vi } from 'date-fns/locale';
+	import PageHeader from '$lib/components/PageHeader.svelte';
 
 	// Sample data structure for events
 	interface CalendarEvent {
@@ -75,22 +75,22 @@
 
 <div class="container mx-auto px-4 py-8">
 	<div class="mb-8 flex items-center justify-between">
-		<h1 class="text-3xl font-bold text-gray-900">Lịch Hoạt Động</h1>
+		<PageHeader title="Lịch công tác" subtitle="Lịch công tác của Mạng lưới" />
 		<div class="flex items-center gap-4">
 			<button
 				class="rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
 				on:click={previousWeek}
 			>
-				Tuần Trước
+				Tuần trước
 			</button>
 			<span class="text-lg font-semibold">
-				{format(currentWeek, 'MMMM yyyy', { locale: vi })}
+				{format(currentWeek, 'MMMM/yyyy', { locale: vi })}
 			</span>
 			<button
 				class="rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
 				on:click={nextWeek}
 			>
-				Tuần Sau
+				Tuần sau
 			</button>
 		</div>
 	</div>
@@ -104,7 +104,7 @@
 						{format(day, 'EEE', { locale: vi })}
 					</div>
 					<div class="text-lg">
-						{format(day, 'd')}
+						{format(day, 'dd/MM')}
 					</div>
 				</div>
 			{/each}
@@ -138,15 +138,15 @@
 	<div class="mt-6 flex justify-end gap-4">
 		<div class="flex items-center gap-2">
 			<div class="h-4 w-4 rounded border border-blue-300 bg-blue-100"></div>
-			<span class="text-sm text-gray-600">Cuộc Họp</span>
+			<span class="text-sm text-gray-600">Họp</span>
 		</div>
 		<div class="flex items-center gap-2">
 			<div class="h-4 w-4 rounded border border-green-300 bg-green-100"></div>
-			<span class="text-sm text-gray-600">Hội Thảo</span>
+			<span class="text-sm text-gray-600">Hội thảo</span>
 		</div>
 		<div class="flex items-center gap-2">
 			<div class="h-4 w-4 rounded border border-purple-300 bg-purple-100"></div>
-			<span class="text-sm text-gray-600">Hội Nghị</span>
+			<span class="text-sm text-gray-600">Hội nghị</span>
 		</div>
 	</div>
 </div>

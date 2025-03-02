@@ -5,8 +5,8 @@
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 	<div class="mx-auto max-w-3xl">
 		<PageHeader
-			title="About Student Research Clubs Network"
-			subtitle="Fostering innovation and research excellence through collaboration"
+			title="Về chúng tôi"
+			subtitle="Thúc đẩy đổi mới sáng tạo và nghiên cứu trong cộng đồng sinh viên Đại học Bách Khoa Hà Nội"
 		/>
 
 		<div class="prose max-w-none">

@@ -2,7 +2,8 @@
 	import { page } from '$app/state';
 
 	// Convert URL path to breadcrumb segments
-	$: segments = page.url.pathname
+	let segments = $state([]);
+	segments = page.url.pathname
 		.split('/')
 		.filter(Boolean)
 		.map((segment, index, arr) => ({

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Building2, Users, MapPin } from 'lucide-svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
 
 	const facilities = [
 		{
@@ -36,11 +37,10 @@
 <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 	<div class="space-y-8">
 		<div>
-			<h1 class="text-3xl font-bold text-gray-900">Cơ sở vật chất</h1>
-			<p class="mt-4 text-lg text-gray-600">
-				Trung tâm ĐMST&KN Sinh viên cung cấp các cơ sở vật chất phục vụ hoạt động nghiên cứu và sinh
-				hoạt CLB.
-			</p>
+			<PageHeader
+				title="Cơ sở vật chất"
+				subtitle="Danh sách các cơ sở vật chất và thiết bị hỗ trợ cho sinh viên"
+			/>
 		</div>
 
 		<div class="grid gap-6 md:grid-cols-2">

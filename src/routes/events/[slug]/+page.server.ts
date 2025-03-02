@@ -19,11 +19,7 @@ const events = [
     sponsors: [
       {
         name: 'VinAI Research',
-        logoUrl: 'https://placehold.co/200x80?text=VinAI'
-      },
-      {
-        name: 'HUST Innovation Lab',
-        logoUrl: 'https://placehold.co/200x80?text=HUST'
+        logoUrl: 'https://www.vinai.io/wp-content/uploads/2021/12/logo-1.png'
       }
     ],
     translation: {
