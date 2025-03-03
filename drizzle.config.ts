@@ -3,7 +3,8 @@ if (
 	!process.env.CLOUDFLARE_ACCOUNT_ID ||
 	!process.env.CLOUDFLARE_DATABASE_ID ||
 	!process.env.CLOUDFLARE_D1_TOKEN
-) throw new Error('Missing Cloudflare connection credentials');
+)
+	throw new Error('Missing Cloudflare connection credentials');
 
 export default defineConfig({
 	schema: './src/lib/server/db/schema.ts',

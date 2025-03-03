@@ -13,6 +13,11 @@
       <feature>Member management and access control</feature>
       <feature>Site configuration and settings management</feature>
       <feature>User-generated content submission system</feature>
+      <feature>Club leadership and advisor management system</feature>
+      <feature>Club collaboration and networking tools</feature>
+      <feature>Cross-club event planning and scheduling</feature>
+      <feature>Mentorship connection platform</feature>
+      <feature>Club activity documentation and archiving</feature>
     </core-features>
   </project-description>
 
@@ -260,4 +265,41 @@
     <rule>Configure automated backup procedures</rule>
     <rule>Set up monitoring for user-generated content</rule>
   </deployment>
+
+  <university-club-networking>
+    <leadership-structure>
+      <role>Club President/Chair (Chủ nhiệm Câu lạc bộ)</role>
+      <role>Faculty Advisors/Professional Consultants (Ban cố vấn chuyên môn)</role>
+      <role>Executive Committee members</role>
+    </leadership-structure>
+    
+    <club-types>
+      <type>Language clubs (E-HUB, CFI)</type>
+      <type>Academic/research clubs (NCKH Mindset)</type>
+      <type>Skill development clubs (SLC)</type>
+    </club-types>
+
+    <activities>
+      <activity>Workshops and training sessions</activity>
+      <activity>Competitions and contests</activity>
+      <activity>Cultural exchange events</activity>
+      <activity>Research projects</activity>
+      <activity>Professional development events</activity>
+    </activities>
+
+    <networking-features>
+      <feature>Cross-club collaboration tools</feature>
+      <feature>Joint event planning system</feature>
+      <feature>Inter-club communication channels</feature>
+      <feature>Resource sharing platform</feature>
+      <feature>Mentorship connection system</feature>
+    </networking-features>
+
+    <documentation-templates>
+      <template>Inter-club activity proposals</template>
+      <template>Club achievement records</template>
+      <template>Club profiles and contact information</template>
+      <template>Membership and activity tracking</template>
+    </documentation-templates>
+  </university-club-networking>
 </rules>
