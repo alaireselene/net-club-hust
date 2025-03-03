@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Building2, Users, MapPin } from 'lucide-svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import BaseCard from '$lib/components/BaseCard.svelte';
 
 	const facilities = [
 		{
@@ -36,17 +37,20 @@
 
 <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 	<div class="space-y-8">
-		<div>
-			<PageHeader
-				title="Cơ sở vật chất"
-				subtitle="Danh sách các cơ sở vật chất và thiết bị hỗ trợ cho sinh viên"
-			/>
-		</div>
+		<PageHeader
+			title="Cơ sở vật chất"
+			subtitle="Danh sách các cơ sở vật chất và thiết bị hỗ trợ cho sinh viên"
+		/>
 
 		<div class="grid gap-6 md:grid-cols-2">
 			{#each facilities as facility}
-				<div
-					class="rounded-lg border border-gray-200 bg-white p-6 shadow-md transition-colors hover:border-teal-500"
+				<BaseCard
+					hover={true}
+					background="bg-white"
+					hoverScale={false}
+					shadow="shadow-md"
+					hoverShadow="hover:shadow-lg"
+					border="border border-gray-200 hover:border-teal-500"
 				>
 					<div class="space-y-4">
 						<div class="flex items-center space-x-2">
@@ -71,7 +75,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</BaseCard>
 			{/each}
 		</div>
 

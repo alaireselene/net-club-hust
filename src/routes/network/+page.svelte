@@ -1,5 +1,7 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import BaseCard from '$lib/components/BaseCard.svelte';
+	import { Users } from 'lucide-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 
@@ -215,9 +217,14 @@
 
 				<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{#each school.clubs as club}
-						<button
-							class="rounded-lg bg-gray-50 p-4 text-left transition-all hover:scale-105 hover:shadow-lg focus:ring-2 focus:ring-teal-500 focus:outline-none dark:bg-gray-700 dark:focus:ring-teal-400"
-							on:click={() => navigateToClub(club.id)}
+						<BaseCard
+							onClick={() => navigateToClub(club.id)}
+							background="bg-gray-50 dark:bg-gray-700"
+							hover={true}
+							hoverScale={true}
+							shadow="shadow-sm"
+							hoverShadow="hover:shadow-lg"
+							padding="p-4"
 						>
 							<h3 class="mb-2 text-lg font-semibold text-gray-800 dark:text-white">
 								{club.name}
@@ -226,23 +233,10 @@
 								{club.description}
 							</p>
 							<div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="mr-1 h-4 w-4"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								>
-									<circle cx="12" cy="12" r="10" />
-									<circle cx="12" cy="10" r="3" />
-									<path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855" />
-								</svg>
+								<Users class="mr-1 h-4 w-4" />
 								<span>{club.members} thành viên</span>
 							</div>
-						</button>
+						</BaseCard>
 					{/each}
 				</div>
 			</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	// TODO: Tab giới thiệu đề tài nổi bật
 	import { Calendar, Users, Lightbulb, Flag } from 'lucide-svelte';
 	import FeaturedNews from '$lib/components/FeaturedNews.svelte';
 	import FeaturedEvents from '$lib/components/FeaturedEvents.svelte';

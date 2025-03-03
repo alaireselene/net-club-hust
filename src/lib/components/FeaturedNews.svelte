@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
+	import BaseCard from './BaseCard.svelte';
+	import { Eye, ChevronRight } from 'lucide-svelte';
 
 	interface Post {
 		id: string;
@@ -97,7 +99,7 @@
 				{#each categories as category}
 					<button
 						class="rounded-full px-4 py-2 text-sm font-medium transition-colors
-            {selectedCategory === category
+                {selectedCategory === category
 							? 'bg-cardinal-600 text-chalk-100'
 							: 'bg-chalk-200 hover:bg-cardinal-50 hover:text-cardinal-600 active:bg-cardinal-100 text-slate-600'}"
 						on:click={() => (selectedCategory = category)}
@@ -112,9 +114,14 @@
 			<div class="grid gap-8 lg:grid-cols-12" in:fade>
 				<!-- Hero Article -->
 				{#if heroPost}
-					<article class="lg:col-span-7">
-						<div
-							class="group bg-chalk-100 relative flex h-full flex-col overflow-hidden rounded-xl shadow-md transition-all hover:shadow-xl"
+					<div class="lg:col-span-7">
+						<BaseCard
+							href="/news/{heroPost.slug}"
+							padding="p-0"
+							background="bg-chalk-100"
+							hover={true}
+							rounded="rounded-xl"
+							hoverScale={true}
 						>
 							<img
 								src={heroPost.image}
@@ -134,20 +141,7 @@
 											{new Date(heroPost.publishedAt).toLocaleDateString()}
 										</time>
 										<span class="flex items-center gap-1.5">
-											<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													stroke-width="2"
-													d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-												/>
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													stroke-width="2"
-													d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-												/>
-											</svg>
+											<Eye class="h-4 w-4" />
 											{formatViews(heroPost.views)}
 										</span>
 									</div>
@@ -158,30 +152,26 @@
 										{heroPost.summary}
 									</p>
 								</div>
-								<a
-									href={`/news/${heroPost.slug}`}
+								<div
 									class="text-cardinal-600 hover:text-cardinal-700 mt-auto inline-flex items-center font-medium transition-colors"
 								>
 									Xem thêm
-									<svg class="ml-1 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M9 5l7 7-7 7"
-										/>
-									</svg>
-								</a>
+									<ChevronRight class="ml-1 h-4 w-4" />
+								</div>
 							</div>
-						</div>
-					</article>
+						</BaseCard>
+					</div>
 				{/if}
 
 				<!-- Small Articles Grid -->
 				<div class="grid gap-6 lg:col-span-5 lg:grid-cols-2">
 					{#each smallPosts as post}
-						<article
-							class="group bg-chalk-100 flex h-full flex-col overflow-hidden rounded-lg shadow-md transition-all hover:shadow-xl"
+						<BaseCard
+							href="/news/{post.slug}"
+							padding="p-0"
+							background="bg-chalk-100"
+							hover={true}
+							hoverScale={true}
 						>
 							<img
 								src={post.image}
@@ -198,20 +188,7 @@
 											{post.category}
 										</span>
 										<span class="flex items-center gap-1">
-											<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													stroke-width="2"
-													d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-												/>
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													stroke-width="2"
-													d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-												/>
-											</svg>
+											<Eye class="h-4 w-4" />
 											{formatViews(post.views)}
 										</span>
 									</div>
@@ -219,22 +196,14 @@
 										{post.title}
 									</h3>
 								</div>
-								<a
-									href={`/news/${post.slug}`}
+								<div
 									class="text-cardinal-600 hover:text-cardinal-700 mt-auto inline-flex items-center font-medium transition-colors"
 								>
 									Xem thêm
-									<svg class="ml-1 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M9 5l7 7-7 7"
-										/>
-									</svg>
-								</a>
+									<ChevronRight class="ml-1 h-4 w-4" />
+								</div>
 							</div>
-						</article>
+						</BaseCard>
 					{/each}
 				</div>
 			</div>

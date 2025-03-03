@@ -1,81 +1,37 @@
 <script lang="ts">
 	import { fade, scale } from 'svelte/transition';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import BaseCard from '$lib/components/BaseCard.svelte';
+	import { Download, FileType, Calendar, User, X } from 'lucide-svelte';
+
+	import type { PageData } from './$types';
+
+	interface Resource {
+		id: number;
+		title: string;
+		description: string;
+		type: string;
+		size: string;
+		downloadCount: number;
+		updatedAt: string;
+		uploader: string;
+		category: string;
+	}
+
+	let { data } = $props<{ data: { resources: Resource[] } }>();
+	let resources = data.resources;
 
 	let searchQuery = '';
 	let selectedFileType = 'all';
 	let selectedCategory = 'all';
 	let showModal = false;
-	let selectedResource: (typeof resources)[number] | null = null;
+	let selectedResource: Resource | null = null;
 
 	// Example resource items
-	const resources = [
-		{
-			id: 1,
-			title: 'Hướng dẫn phương pháp nghiên cứu khoa học',
-			description:
-				'Tài liệu chi tiết về các phương pháp nghiên cứu phổ biến trong khoa học kỹ thuật, bao gồm các ví dụ thực tế và hướng dẫn thực hành. Phù hợp cho sinh viên và nghiên cứu viên mới.',
-			type: 'PDF',
-			size: '2.5 MB',
-			downloadCount: 128,
-			updatedAt: '2024-02-28',
-			uploader: 'TS. Nguyễn Văn A',
-			category: 'Tài liệu nghiên cứu'
-		},
-		{
-			id: 2,
-			title: 'Mẫu báo cáo nghiên cứu khoa học',
-			description:
-				'Template chuẩn cho việc viết báo cáo nghiên cứu khoa học, được thiết kế theo tiêu chuẩn quốc tế. Bao gồm hướng dẫn định dạng và cấu trúc nội dung.',
-			type: 'DOCX',
-			size: '1.2 MB',
-			downloadCount: 256,
-			updatedAt: '2024-02-25',
-			uploader: 'ThS. Trần Thị B',
-			category: 'Tài liệu nghiên cứu'
-		},
-		{
-			id: 3,
-			title: 'Bộ công cụ phân tích dữ liệu',
-			description:
-				'Tập hợp các công cụ hỗ trợ phân tích và xử lý dữ liệu nghiên cứu. Bao gồm scripts thống kê, visualization tools, và hướng dẫn sử dụng chi tiết.',
-			type: 'ZIP',
-			size: '45 MB',
-			downloadCount: 75,
-			updatedAt: '2024-02-20',
-			uploader: 'TS. Lê Văn C',
-			category: 'Công cụ và phần mềm'
-		},
-		{
-			id: 4,
-			title: 'Hướng dẫn sử dụng phòng thí nghiệm',
-			description:
-				'Quy trình và quy định về việc sử dụng các phòng thí nghiệm của trường. Bao gồm các biện pháp an toàn, quy trình vận hành thiết bị, và thủ tục đăng ký sử dụng.',
-			type: 'PDF',
-			size: '3.1 MB',
-			downloadCount: 182,
-			updatedAt: '2024-02-15',
-			uploader: 'ThS. Phạm Thị D',
-			category: 'Tài liệu hướng dẫn'
-		},
-		{
-			id: 5,
-			title: 'Quy trình đăng ký thiết bị',
-			description:
-				'Hướng dẫn chi tiết về quy trình đăng ký và sử dụng thiết bị nghiên cứu. Bao gồm mẫu đơn, thời gian xử lý, và các yêu cầu cần thiết.',
-			type: 'PDF',
-			size: '1.8 MB',
-			downloadCount: 94,
-			updatedAt: '2024-02-10',
-			uploader: 'TS. Hoàng Văn E',
-			category: 'Tài liệu hướng dẫn'
-		}
-	];
-
 	const fileTypes = ['all', 'PDF', 'DOCX', 'ZIP'];
-	const categories = ['all', ...new Set(resources.map((r) => r.category))];
+	const categories = ['all', ...new Set(resources.map((r: Resource) => r.category))];
 
-	$: filteredResources = resources.filter((resource) => {
+	let filteredResources = resources.filter((resource: Resource) => {
 		const matchesSearch =
 			resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			resource.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -146,47 +102,54 @@
 	<!-- Resource Grid -->
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each filteredResources as resource}
-			<div
-				class="min-h-[20rem] cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-shadow duration-300 hover:shadow-lg"
-				on:click={() => openModal(resource)}
-				on:keypress={(e) => e.key === 'Enter' && openModal(resource)}
-				tabindex="0"
-				role="button"
+			<BaseCard
+				padding="p-6"
+				background="bg-white"
+				hover={true}
+				shadow="shadow-md"
+				hoverShadow="hover:shadow-lg"
 			>
-				<div class="flex h-full flex-col p-6">
-					<div class="grow space-y-4">
-						<div class="flex items-start justify-between">
-							<div class="flex items-center space-x-2">
-								<span class="rounded bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
-									{resource.type}
-								</span>
-								<span class="text-xs text-slate-500">{resource.size}</span>
+				<div
+					class="cursor-pointer"
+					on:click|stopPropagation={() => openModal(resource)}
+					on:keydown|stopPropagation={(e) => e.key === 'Enter' && openModal(resource)}
+					role="button"
+					tabindex="0"
+				>
+					<div class="flex h-full flex-col">
+						<div class="grow space-y-4">
+							<div class="flex items-start justify-between">
+								<div class="flex items-center space-x-2">
+									<span class="rounded bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
+										{resource.type}
+									</span>
+									<span class="text-xs text-slate-500">{resource.size}</span>
+								</div>
+								<span class="text-xs text-slate-500">{resource.downloadCount} lượt tải</span>
 							</div>
-							<span class="text-xs text-slate-500">{resource.downloadCount} lượt tải</span>
+
+							<h3 class="line-clamp-2 text-lg font-medium text-slate-800">
+								{resource.title}
+							</h3>
+
+							<p class="line-clamp-2 text-sm text-slate-600">
+								{resource.description}
+							</p>
 						</div>
 
-						<h3 class="line-clamp-2 text-lg font-medium text-slate-800">
-							{resource.title}
-						</h3>
-
-						<p class="line-clamp-2 text-sm text-slate-600">
-							{resource.description}
-						</p>
+						<div class="mt-4 flex items-center justify-between border-t pt-4">
+							<span class="text-xs text-slate-500">
+								Cập nhật: {resource.updatedAt}
+							</span>
+							<button
+								class="rounded-md bg-teal-600 px-4 py-2 text-sm text-white transition-colors hover:bg-teal-700"
+							>
+								<Download class="h-4 w-4" />
+							</button>
+						</div>
 					</div>
-
-					<div class="mt-4 flex items-center justify-between border-t pt-4">
-						<span class="text-xs text-slate-500">
-							Cập nhật: {resource.updatedAt}
-						</span>
-						<button
-							class="rounded-md bg-teal-600 px-4 py-2 text-sm text-white transition-colors hover:bg-teal-700"
-							on:click|stopPropagation={() => {}}
-						>
-							Tải xuống
-						</button>
-					</div>
-				</div>
-			</div>
+				</div></BaseCard
+			>
 		{/each}
 	</div>
 
@@ -198,68 +161,63 @@
 			transition:fade
 		>
 			<div
-				class="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-xl"
+				class="max-h-[90vh] w-full max-w-2xl overflow-y-auto"
 				on:click|stopPropagation={() => {}}
 				transition:scale
 			>
-				{#if selectedResource}
-					<div class="space-y-6 p-6">
-						<div class="flex items-start justify-between">
-							<div>
-								<h3 class="mb-2 text-xl font-semibold text-slate-800">
-									{selectedResource.title}
-								</h3>
-								<div class="flex items-center space-x-3">
-									<span class="rounded bg-slate-100 px-2 py-1 text-sm font-medium text-slate-600">
-										{selectedResource.type}
-									</span>
-									<span class="text-sm text-slate-500">{selectedResource.size}</span>
+				<BaseCard padding="p-6" background="bg-white" shadow="shadow-xl">
+					{#if selectedResource}
+						<div class="space-y-6">
+							<div class="flex items-start justify-between">
+								<div>
+									<h3 class="mb-2 text-xl font-semibold text-slate-800">
+										{selectedResource.title}
+									</h3>
+									<div class="flex items-center space-x-3">
+										<span class="rounded bg-slate-100 px-2 py-1 text-sm font-medium text-slate-600">
+											{selectedResource.type}
+										</span>
+										<span class="text-sm text-slate-500">{selectedResource.size}</span>
+									</div>
+								</div>
+								<button class="text-slate-400 hover:text-slate-600" on:click={closeModal}>
+									<X class="h-6 w-6" />
+								</button>
+							</div>
+
+							<div class="prose prose-slate max-w-none">
+								<p>{selectedResource.description}</p>
+							</div>
+
+							<div class="grid grid-cols-2 gap-4 text-sm text-slate-600">
+								<div>
+									<span class="font-medium">Người đăng tải:</span>
+									<p>{selectedResource.uploader}</p>
+								</div>
+								<div>
+									<span class="font-medium">Danh mục:</span>
+									<p>{selectedResource.category}</p>
+								</div>
+								<div>
+									<span class="font-medium">Lượt tải:</span>
+									<p>{selectedResource.downloadCount}</p>
+								</div>
+								<div>
+									<span class="font-medium">Cập nhật:</span>
+									<p>{selectedResource.updatedAt}</p>
 								</div>
 							</div>
-							<button class="text-slate-400 hover:text-slate-600" on:click={closeModal}>
-								<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M6 18L18 6M6 6l12 12"
-									/>
-								</svg>
-							</button>
-						</div>
 
-						<div class="prose prose-slate max-w-none">
-							<p>{selectedResource.description}</p>
-						</div>
-
-						<div class="grid grid-cols-2 gap-4 text-sm text-slate-600">
-							<div>
-								<span class="font-medium">Người đăng tải:</span>
-								<p>{selectedResource.uploader}</p>
-							</div>
-							<div>
-								<span class="font-medium">Danh mục:</span>
-								<p>{selectedResource.category}</p>
-							</div>
-							<div>
-								<span class="font-medium">Lượt tải:</span>
-								<p>{selectedResource.downloadCount}</p>
-							</div>
-							<div>
-								<span class="font-medium">Cập nhật:</span>
-								<p>{selectedResource.updatedAt}</p>
+							<div class="flex justify-end border-t pt-4">
+								<button
+									class="rounded-md bg-teal-600 px-6 py-2 text-white transition-colors hover:bg-teal-700"
+								>
+									Tải xuống
+								</button>
 							</div>
 						</div>
-
-						<div class="flex justify-end border-t pt-4">
-							<button
-								class="rounded-md bg-teal-600 px-6 py-2 text-white transition-colors hover:bg-teal-700"
-							>
-								Tải xuống
-							</button>
-						</div>
-					</div>
-				{/if}
+					{/if}
+				</BaseCard>
 			</div>
 		</div>
 	{/if}
