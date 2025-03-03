@@ -1,14 +1,14 @@
 <rules>
   <project-description>
     <name>Student Research Clubs Network Portal</name>
-    <description>Website for the Student Research Clubs Network under the Student Innovation and Entrepreneurship Center, Hanoi University of Technology. The platform serves as a central hub for managing research club activities, events, and resources.</description>
+    <description>Website for the Student Research Clubs Network under the  Innovation and Entrepreneurship Center, Hanoi University of Science and Technology. The platform serves as a central hub for managing research club activities, events, and resources.</description>
     <core-features>
       <feature>Dynamic homepage with featured news and events</feature>
       <feature>Categorized news section with filtering capabilities</feature>
       <feature>Interactive network visualization using D3.js</feature>
       <feature>Weekly schedule management system</feature>
       <feature>Resource sharing and facility management</feature>
-      <feature>Nội dung tiếng Việt</feature>
+      <feature>Full Vietnamese content</feature>
       <feature>Content management system for blog posts and resources</feature>
       <feature>Member management and access control</feature>
       <feature>Site configuration and settings management</feature>
@@ -28,11 +28,13 @@
       <principle>International academic standards with local cultural elements</principle>
     </principles>
     <colors>
-      <color>Deep navy blue - representing academia and professionalism</color>
-      <color>Vibrant teal - symbolizing innovation and growth</color>
-      <color>Traditional red accents - honoring Vietnamese heritage</color>
-      <color>Modern slate gray - providing neutral balance</color>
-      <color>Fresh mint green - representing youth and development</color>
+      <color>Cardinal Red (RGB: 206, 22, 40) - Main brand color representing strength and determination</color>
+      <color>Navy Blue (RGB: 0, 51, 102) - Secondary color representing professionalism and trust</color>
+      <color>Sunflower Yellow (RGB: 243, 193, 8) - Accent color representing energy and optimism</color>
+      <color>Charcoal Gray (RGB: 35, 32, 32) - Neutral color for text and backgrounds</color>
+      <color>Crimson Red (RGB: 192, 32, 52) - Secondary red for dynamic accents</color>
+      <color>Tangerine Orange (RGB: 245, 127, 32) - Accent color for calls-to-action</color>
+      <color>Chalk White - Clean backgrounds and text contrast</color>
     </colors>
     <typography>
       <style>Clean, modern sans-serif for primary text</style>
@@ -45,18 +47,24 @@
       <element>Clean cards with subtle traditional decorative elements</element>
       <element>Interactive elements with smooth, professional animations</element>
       <element>Minimalist icons incorporating traditional symbols</element>
+      <element>Cardinal red highlights for primary actions and emphasis</element>
+      <element>Navy blue accents for secondary information</element>
+      <element>Sunflower yellow for attention-grabbing elements</element>
+      <element>Consistent color hierarchy across components</element>
+      <element>White space utilizing Chalk White for readability</element>
     </visual-elements>
   </design-theme>
 
   <technologies>
-    <core>
-      <tech>SvelteKit 2.x for app framework</tech>
-      <tech>TypeScript 5.x for type safety</tech>
-      <tech>Vite 6.x for build tooling</tech>
-    </core>
+  <core>
+    <tech>Svelte 5 for app framework</tech>
+    <tech>SvelteKit 2.x for app framework</tech>
+    <tech>TypeScript 5.x for type safety with runes</tech>
+    <tech>Vite 6.x for build tooling</tech>
+    <tech>@sveltejs/adapter-cloudflare for Cloudflare deployment</tech>
+  </core>
     <cloudflare>
       <tech>Cloudflare Pages for hosting and deployment</tech>
-      <tech>Cloudflare Workers for serverless functions</tech>
       <tech>Cloudflare D1 for serverless SQLite database</tech>
       <tech>Cloudflare R2 for S3-compatible object storage</tech>
       <tech>Cloudflare Images for image optimization and CDN</tech>
@@ -65,26 +73,26 @@
       <tech>Tailwind CSS 4.x for utility-first styling</tech>
       <tech>@tailwindcss/typography for content styling</tech>
       <tech>@tailwindcss/forms for form elements</tech>
+      <tech>@tailwindcss/aspect-ratio for responsive media</tech>
       <tech>lucide-svelte for consistent iconography</tech>
+      <tech>@fontsource packages for self-hosted fonts</tech>
     </styling>
     <database>
       <tech>Drizzle ORM for database operations</tech>
-      <tech>libSQL client for D1 connectivity</tech>
     </database>
     <testing>
       <tech>Vitest for unit testing</tech>
       <tech>Testing Library for component testing</tech>
-      <tech>JSDOM for browser environment simulation</tech>
     </testing>
     <security>
       <tech>Node-RS Argon2 for password hashing</tech>
       <tech>Oslo.js crypto for cryptographic operations</tech>
+      <tech>Zod for schema declaration and validation</tech>
     </security>
-    <internationalization>
-      <tech>@inlang/paraglide-js v2 for i18n management</tech>
-      <tech>@google/generative-ai for automated translation</tech>
-      <tech>Gemini Flash 2.0 Experiment model</tech>
-    </internationalization>
+    <content>
+      <tech>TipTap for rich text editing</tech>
+      <tech>DOMPurify for HTML sanitization</tech>
+    </content>
     <visualization>
       <tech>D3.js v7 for network visualization</tech>
     </visualization>
@@ -105,7 +113,7 @@
     <rule>Follow TypeScript best practices and maintain type safety across the codebase</rule>
     <rule>Use SvelteKit conventions for routing and data loading</rule>
     <rule>Format code using Prettier configuration and ESLint rules</rule>
-    <rule>Keep component files focused and modular (<200 lines recommended)</rule>
+    <rule>Keep component files focused and modular (maximum 200 lines recommended)</rule>
     <rule>Use meaningful variable and function names that reflect their purpose</rule>
     <rule>Type database queries using $inferSelect from schema definitions</rule>
     <rule>Follow Cloudflare adapter constraints for serverless deployment</rule>
@@ -174,9 +182,8 @@
   </storage>
 
   <ui-components>
-    <rule>Create reusable components for news and event cards</rule>
+    <rule>Create reusable components</rule>
     <rule>Implement responsive calendar component for schedule display</rule>
-    <rule>Build interactive D3.js network visualization component</rule>
     <rule>Design consistent filtering interfaces across sections</rule>
     <rule>Ensure proper loading states and error boundaries</rule>
     <rule>Maintain accessibility standards (WCAG 2.1)</rule>
@@ -209,28 +216,37 @@
     <rule>Follow Cloudflare Pages and Workers best practices</rule>
     <rule>Utilize Cloudflare Images for optimized image delivery</rule>
     <rule>Optimize network graph rendering performance</rule>
-    <rule>Cache AI translation results efficiently</rule>
-    <rule>Implement translation queue for large content</rule>
     <rule>Implement pagination for content listings</rule>
     <rule>Optimize file upload handling</rule>
+    <rule>Implement Vietnamese font subsetting for performance</rule>
+    <rule>Configure proper Vietnamese text rendering</rule>
+    <rule>Optimize meta tags for Vietnamese search engines</rule>
   </performance>
 
   <documentation>
     <rule>Update README.md for significant changes</rule>
     <rule>Document API endpoints and their usage</rule>
-    <rule>Add JSDoc comments for complex functions</rule>
     <rule>Keep configuration files documented</rule>
     <rule>Document authentication flows and security measures</rule>
-
-    <rule>Document Paraglide v2 configuration in vite.config.ts</rule>
-    <rule>Document URL localization with localizeHref usage</rule>
     <rule>Include database schema documentation</rule>
     <rule>Document facility booking integration procedures</rule>
     <rule>Provide content management system user guide</rule>
     <rule>Document member roles and permissions</rule>
-    <rule>Document AI translation workflow and review process</rule>
-    <rule>Secure API keys for AI services in environment variables</rule>
+    <rule>Document Vietnamese content guidelines and standards</rule>
   </documentation>
+
+  <vietnamese-content>
+    <rule>Follow standard Vietnamese typography rules and conventions</rule>
+    <rule>Ensure proper handling of Vietnamese diacritical marks</rule>
+    <rule>Use appropriate Vietnamese date and time formats</rule>
+    <rule>Implement Vietnamese-specific content validation rules</rule>
+    <rule>Follow Vietnamese academic writing style guidelines</rule>
+    <rule>Use consistent Vietnamese terminology across the platform</rule>
+    <rule>Ensure proper sorting and searching of Vietnamese text</rule>
+    <rule>Support Vietnamese input methods in all form fields</rule>
+    <rule>Optimize SEO for Vietnamese search engines</rule>
+    <rule>Follow Vietnamese cultural conventions in UI elements</rule>
+  </vietnamese-content>
 
   <deployment>
     <rule>Test builds locally before deployment</rule>

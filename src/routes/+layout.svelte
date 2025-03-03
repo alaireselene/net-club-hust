@@ -367,7 +367,7 @@
 						</div>
 					</div>
 
-					{#each [{ href: '/research', text: 'Sinh viên NCKH' }, { href: '/partnerships', text: 'Hợp tác - Đối ngoại' }, { href: '/resources', text: 'Tài nguyên' }, { href: '/facilities', text: 'Cơ sở vật chất' }] as { href, text }}
+					{#each [{ href: '/research', text: 'Đề tài SVNCKH' }, { href: '/partnerships', text: 'Hợp tác Đối ngoại' }, { href: '/resources', text: 'Tài nguyên' }, { href: '/facilities', text: 'Cơ sở vật chất' }] as { href, text }}
 						<a
 							{href}
 							class="hover:text-cardinal-600 focus:ring-cardinal-600 font-medium text-slate-700 uppercase transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none {page
@@ -548,7 +548,7 @@
 				<div class="grid grid-cols-1 gap-8 lg:grid-cols-4">
 					<!-- Brand Column -->
 					<div class="space-y-6">
-						<img src="/logo.svg" alt="HUST Research Clubs Network Logo" class="h-12 w-auto" />
+						<img src="/logo.svg" alt="HUST Research Clubs Network Logo" class="h-30 w-auto" />
 						<p class="text-base text-slate-600">
 							Trung tâm Sáng tạo và Khởi nghiệp Sinh viên<br />
 							Đại học Bách khoa Hà Nội
