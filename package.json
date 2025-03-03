@@ -60,8 +60,5 @@
 		"date-fns": "^4.1.0",
 		"drizzle-orm": "^0.38.4",
 		"lucide-svelte": "^0.477.0"
-	},
-	"engines": {
-		"node": "22.14.0"
 	}
 }
