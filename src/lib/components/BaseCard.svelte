@@ -1,53 +1,48 @@
 <script lang="ts">
+	// Props for different card styles and behaviors
+	let {
+		href = undefined,
+		onClick = undefined,
+		featured = false,
+		padding = 'p-4',
+		hover = 'true',
+		background = 'bg-white dark:bg-slate-900',
+		border = 'border border-slate-200 dark:border-slate-800',
+		rounded = 'rounded-lg',
+		shadow = 'shadow-sm',
+		hoverShadow = 'hover:shadow-md',
+		hoverScale = false,
+		transition = 'transition-all',
+		children
+	} = $props();
+
 	type ElementType = 'a' | 'button' | 'div';
 
-	interface $$Props {
-		href?: string;
-		onClick?: () => void;
-		featured?: boolean;
-		padding?: string;
-		hover?: boolean;
-		background?: string;
-		border?: string;
-		rounded?: string;
-		shadow?: string;
-		hoverShadow?: string;
-		hoverScale?: boolean;
-		transition?: string;
-	}
+	// Using Svelte 5 Runes syntax
+	$effect(() => {
+		cardClasses = [
+			'group relative flex flex-col overflow-hidden',
+			padding,
+			background,
+			border,
+			rounded,
+			shadow,
+			hover && hoverShadow,
+			hoverScale && 'hover:scale-105',
+			transition
+		]
+			.filter(Boolean)
+			.join(' ');
+	});
 
-	// Props for different card styles and behaviors
-	export let href: string | undefined = undefined;
-	export let onClick: (() => void) | undefined = undefined;
-	export let featured = false;
-	export let padding = 'p-4';
-	export let hover = true;
-	export let background = 'bg-white dark:bg-slate-900';
-	export let border = 'border border-slate-200 dark:border-slate-800';
-	export let rounded = 'rounded-lg';
-	export let shadow = 'shadow-sm';
-	export let hoverShadow = 'hover:shadow-md';
-	export let hoverScale = false;
-	export let transition = 'transition-all';
+	let cardClasses = $state('');
+	let isInteractive = $state(false);
+	let element: ElementType = $state('div');
 
-	// Generate class string based on props
-	$: cardClasses = [
-		'group relative flex flex-col overflow-hidden',
-		padding,
-		background,
-		border,
-		rounded,
-		shadow,
-		hover && hoverShadow,
-		hoverScale && 'hover:scale-105',
-		transition
-	]
-		.filter(Boolean)
-		.join(' ');
-
-	// Determine if the card should be a button/link or div
-	$: isInteractive = href || onClick;
-	$: element = (href ? 'a' : onClick ? 'button' : 'div') as ElementType;
+	$effect(() => {
+		isInteractive = Boolean(href || onClick);
+		element = (href ? 'a' : onClick ? 'button' : 'div') as ElementType;
+	});
 </script>
 
 {#if element === 'a'}
@@ -59,7 +54,7 @@
 				Featured
 			</div>
 		{/if}
-		<slot />
+		{@render children()}
 	</a>
 {:else if element === 'button'}
 	<button class={cardClasses} on:click={onClick} on:keydown>
@@ -70,7 +65,7 @@
 				Featured
 			</div>
 		{/if}
-		<slot />
+		{@render children()}
 	</button>
 {:else}
 	<div class={cardClasses}>
@@ -81,6 +76,6 @@
 				Featured
 			</div>
 		{/if}
-		<slot />
+		{@render children()}
 	</div>
 {/if}

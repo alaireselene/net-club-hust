@@ -67,6 +67,7 @@
     <tech>TypeScript 5.x for type safety with runes</tech>
     <tech>Vite 6.x for build tooling</tech>
     <tech>@sveltejs/adapter-cloudflare for Cloudflare deployment</tech>
+    <tech>Bits UI for headless component primitives</tech>
   </core>
     <cloudflare>
       <tech>Cloudflare Pages for hosting and deployment</tech>
@@ -140,7 +141,7 @@
     <rule>Implement dark mode support using Tailwind's dark: variant</rule>
     <rule>Create reusable component classes using @apply when needed</rule>
     <rule>Maintain a consistent color palette using Tailwind theme configuration</rule>
-    <rule>Use @tailwindcss/forms for styled form elements</rule>
+    <rule>Style Bits UI components using Tailwind classes</rule>
     <rule>Follow spacing and sizing scale from Tailwind configuration</rule>
     <rule>Use Lucide icons consistently with themed colors</rule>
     <rule>Maintain consistent icon sizes across similar UI elements</rule>
@@ -187,16 +188,16 @@
   </storage>
 
   <ui-components>
-    <rule>Create reusable components</rule>
-    <rule>Implement responsive calendar component for schedule display</rule>
-    <rule>Design consistent filtering interfaces across sections</rule>
-    <rule>Ensure proper loading states and error boundaries</rule>
-    <rule>Maintain accessibility standards (WCAG 2.1)</rule>
-    <rule>Apply consistent Tailwind classes for component styling</rule>
+    <rule>Utilize Bits UI primitives as base components</rule>
+    <rule>Use Bits UI Calendar for schedule management</rule>
+    <rule>Implement Bits UI Select for filtering interfaces</rule>
+    <rule>Use Bits UI Dialog for modal interactions</rule>
+    <rule>Implement Bits UI Form primitives for form components</rule>
+    <rule>Maintain accessibility through Bits UI ARIA integrations</rule>
     <rule>Use Lucide icons instead of custom SVGs for better bundle optimization</rule>
-    <rule>Build rich text editor for content management</rule>
-    <rule>Create member management interface components</rule>
-    <rule>Implement site settings configuration forms</rule>
+    <rule>Build rich text editor using Bits UI and TipTap</rule>
+    <rule>Compose complex interfaces using Bits UI primitives</rule>
+    <rule>Implement responsive variants of Bits UI components</rule>
   </ui-components>
 
   <testing>
