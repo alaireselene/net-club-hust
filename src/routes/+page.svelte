@@ -1,15 +1,33 @@
 <script lang="ts">
-	// TODO: Tab giới thiệu đề tài nổi bật
 	import { Calendar, Users, Lightbulb, Flag } from 'lucide-svelte';
 	import FeaturedNews from '$lib/components/FeaturedNews.svelte';
 	import FeaturedEvents from '$lib/components/FeaturedEvents.svelte';
+	import type { Post, Event } from '$lib/server/db/schema';
 
-	const stats = [
-		{ icon: Calendar, value: '15+', label: 'Câu lạc bộ' },
-		{ icon: Users, value: '500+', label: 'Thành viên' },
-		{ icon: Lightbulb, value: '30+', label: 'Dự án' },
-		{ icon: Flag, value: '50+', label: 'Sự kiện' }
-	];
+	interface PageData {
+		stats: Array<{ value: string; label: StatLabel }>;
+		featuredPosts: Post[];
+		upcomingEvents: Event[];
+	}
+
+	type StatLabel = 'Câu lạc bộ' | 'Thành viên' | 'Dự án' | 'Sự kiện';
+
+	let { data }: { data: PageData } = $props();
+
+	const icons = {
+		'Câu lạc bộ': Calendar,
+		'Thành viên': Users,
+		'Dự án': Lightbulb,
+		'Sự kiện': Flag
+	} as const;
+
+	const stats = data.stats.map((stat) => ({
+		Icon: icons[stat.label as keyof typeof icons],
+		value: stat.value,
+		label: stat.label
+	}));
+
+	console.log(data);
 </script>
 
 <!-- Hero Section -->
@@ -46,12 +64,12 @@
 
 			<!-- Stats Grid -->
 			<div class="mx-auto mt-12 grid max-w-4xl grid-cols-2 gap-8 sm:gap-x-12 md:grid-cols-4">
-				{#each stats as { icon: Icon, value, label }}
+				{#each stats as { Icon, value, label }}
 					<div class="text-center">
 						<div
 							class="bg-cardinal-50 ring-cardinal-200 mx-auto flex h-14 w-14 items-center justify-center rounded-xl ring-1"
 						>
-							<svelte:component this={Icon} class="text-cardinal-600 h-7 w-7" />
+							<Icon class="text-cardinal-600 h-7 w-7" />
 						</div>
 						<p class="text-navy-800 mt-4 font-sans text-2xl font-bold">{value}</p>
 						<p class="mt-2 text-sm font-medium text-slate-600">{label}</p>
@@ -71,6 +89,6 @@
 	</div>
 </section>
 
-<FeaturedNews />
+<FeaturedNews posts={data.featuredPosts} />
 
-<FeaturedEvents />
+<FeaturedEvents events={data.upcomingEvents} />

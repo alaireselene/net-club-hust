@@ -2,11 +2,25 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import BaseCard from '$lib/components/BaseCard.svelte';
 	import { Users } from 'lucide-svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 
+	interface Club {
+		id: number;
+		name: string;
+		description: string;
+		members: number;
+	}
+
+	interface School {
+		id: number;
+		name: string;
+		shortName: string;
+		clubs: Club[];
+	}
+
 	// Mock data for schools/faculties and their clubs
-	const networkData = [
+	const networkData: School[] = [
 		{
 			id: 1,
 			name: 'Trường CNTT&TT',
@@ -38,137 +52,31 @@
 					members: 32
 				}
 			]
-		},
-		{
-			id: 3,
-			name: 'Trường Cơ khí',
-			shortName: 'SME',
-			clubs: [
-				{
-					id: 301,
-					name: 'Robotics Research Club',
-					description: 'Nghiên cứu robot và tự động hóa nâng cao',
-					members: 50
-				},
-				{
-					id: 302,
-					name: 'CAD/CAM Innovation',
-					description: 'Công nghệ sản xuất số',
-					members: 28
-				}
-			]
-		},
-		{
-			id: 4,
-			name: 'Trường Điện-Điện tử',
-			shortName: 'SEEE',
-			clubs: [
-				{
-					id: 401,
-					name: 'Renewable Energy Club',
-					description: 'Nghiên cứu giải pháp năng lượng bền vững',
-					members: 40
-				}
-			]
-		},
-		{
-			id: 5,
-			name: 'Trường Vật liệu',
-			shortName: 'SMSE',
-			clubs: [
-				{
-					id: 501,
-					name: 'Materials Science Society',
-					description: 'Thúc đẩy nghiên cứu và phát triển vật liệu',
-					members: 35
-				}
-			]
-		},
-		{
-			id: 6,
-			name: 'Trường Kinh tế',
-			shortName: 'SEM',
-			clubs: [
-				{
-					id: 601,
-					name: 'Economics Research Group',
-					description: 'Phân tích xu hướng và chính sách kinh tế',
-					members: 25
-				}
-			]
-		},
-		{
-			id: 7,
-			name: 'Khoa Toán-Tin',
-			shortName: 'FAMI',
-			clubs: [
-				{
-					id: 701,
-					name: 'Mathematics Society',
-					description: 'Thúc đẩy nghiên cứu và giáo dục toán học',
-					members: 30
-				}
-			]
-		},
-		{
-			id: 8,
-			name: 'Khoa VLKT',
-			shortName: 'SEP',
-			clubs: [
-				{
-					id: 801,
-					name: 'Physics Club',
-					description: 'Khám phá các khái niệm vật lý cơ bản',
-					members: 20
-				}
-			]
-		},
-		{
-			id: 9,
-			name: 'Khoa Ngoại ngữ',
-			shortName: 'FOFL',
-			clubs: [
-				{
-					id: 901,
-					name: 'Language Exchange Club',
-					description: 'Thực hành kỹ năng ngoại ngữ',
-					members: 15
-				}
-			]
-		},
-		{
-			id: 10,
-			name: 'Khoa Khoa học & CNGD',
-			shortName: 'FED',
-			clubs: [
-				{
-					id: 1001,
-					name: 'Environmental Science Club',
-					description: 'Nghiên cứu các vấn đề và giải pháp môi trường',
-					members: 18
-				}
-			]
 		}
 	];
 
-	// Get school filter from URL query
-	$: schoolFilter = $page.url.searchParams.get('school');
+	let schoolFilter = $state<string | null>(null);
+
+	// Update schoolFilter when URL changes
+	$effect(() => {
+		schoolFilter = page.url.searchParams.get('school');
+	});
 
 	// Filter schools based on URL query
-	$: filteredData = schoolFilter
-		? networkData.filter(
-				(school) =>
-					school.shortName.toLowerCase() === schoolFilter.toLowerCase() ||
-					school.id.toString() === schoolFilter
-			)
-		: networkData;
+	let filteredData = $derived(
+		schoolFilter
+			? networkData.filter(
+					(school) =>
+						school.shortName.toLowerCase() === schoolFilter?.toLowerCase() ||
+						school.id.toString() === schoolFilter
+				)
+			: networkData
+	);
 
-	// Handle school filter click
-	function filterBySchool(school: { id: number; shortName: string }) {
+	function filterBySchool(school: School) {
 		goto(`?school=${school.shortName}`);
 	}
 
-	// Handle club click
 	function navigateToClub(clubId: number) {
 		goto(`/network/${clubId}`);
 	}
@@ -180,21 +88,25 @@
 	<!-- School filters -->
 	<div class="mb-6 flex flex-wrap gap-2">
 		<button
-			class="rounded-lg px-4 py-2 text-sm font-medium transition-colors
-        {!schoolFilter
-				? 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-100'
-				: 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'}"
-			on:click={() => goto('/network')}
+			class={[
+				'rounded-lg px-4 py-2 text-sm font-medium transition-colors',
+				!schoolFilter
+					? 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-100'
+					: 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+			]}
+			onclick={() => goto('/network')}
 		>
 			Toàn bộ
 		</button>
 		{#each networkData as school}
 			<button
-				class="rounded-lg px-4 py-2 text-sm font-medium transition-colors
-          {schoolFilter === school.shortName
-					? 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-100'
-					: 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'}"
-				on:click={() => filterBySchool(school)}
+				class={[
+					'rounded-lg px-4 py-2 text-sm font-medium transition-colors',
+					schoolFilter === school.shortName
+						? 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-100'
+						: 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+				]}
+				onclick={() => filterBySchool(school)}
 			>
 				{school.shortName}
 			</button>
@@ -218,7 +130,7 @@
 				<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{#each school.clubs as club}
 						<BaseCard
-							onClick={() => navigateToClub(club.id)}
+							onclick={() => navigateToClub(club.id)}
 							background="bg-gray-50 dark:bg-gray-700"
 							hover={true}
 							hoverScale={true}

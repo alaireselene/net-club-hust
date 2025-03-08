@@ -1,81 +1,77 @@
 <script lang="ts">
-	// Props for different card styles and behaviors
-	let {
-		href = undefined,
-		onClick = undefined,
-		featured = false,
-		padding = 'p-4',
-		hover = 'true',
-		background = 'bg-white dark:bg-slate-900',
-		border = 'border border-slate-200 dark:border-slate-800',
-		rounded = 'rounded-lg',
-		shadow = 'shadow-sm',
-		hoverShadow = 'hover:shadow-md',
-		hoverScale = false,
-		transition = 'transition-all',
-		children
-	} = $props();
+	import type { ClassValue } from 'svelte/elements';
+
+	type Props = {
+		href?: string;
+		onclick?: (event: MouseEvent) => void;
+		onkeydown?: (event: KeyboardEvent) => void;
+		featured?: boolean;
+		padding?: string;
+		hover?: boolean;
+		background?: string;
+		border?: string;
+		rounded?: string;
+		shadow?: string;
+		hoverShadow?: string;
+		hoverScale?: boolean;
+		transition?: string;
+		class?: ClassValue;
+		children: () => any;
+	};
 
 	type ElementType = 'a' | 'button' | 'div';
 
-	// Using Svelte 5 Runes syntax
-	$effect(() => {
-		cardClasses = [
-			'group relative flex flex-col overflow-hidden',
-			padding,
-			background,
-			border,
-			rounded,
-			shadow,
-			hover && hoverShadow,
-			hoverScale && 'hover:scale-105',
-			transition
-		]
-			.filter(Boolean)
-			.join(' ');
-	});
+	let props: Props = $props();
+	let isInteractive = $derived(Boolean(props.href || props.onclick));
+	let element = $derived(props.href ? 'a' : props.onclick ? 'button' : ('div' as ElementType));
 
-	let cardClasses = $state('');
-	let isInteractive = $state(false);
-	let element: ElementType = $state('div');
+	const baseClasses = [
+		'group relative flex flex-col overflow-hidden',
+		props.padding ?? 'p-4',
+		props.background ?? 'bg-white dark:bg-slate-900',
+		props.border ?? 'border border-slate-200 dark:border-slate-800',
+		props.rounded ?? 'rounded-lg',
+		props.shadow ?? 'shadow-sm',
+		{ [props.hoverShadow ?? 'hover:shadow-md']: props.hover },
+		{ 'hover:scale-105': props.hoverScale },
+		props.transition ?? 'transition-all',
+		props.class
+	];
 
-	$effect(() => {
-		isInteractive = Boolean(href || onClick);
-		element = (href ? 'a' : onClick ? 'button' : 'div') as ElementType;
-	});
+	const featuredBadgeClasses = [
+		'absolute top-2 right-2 z-10',
+		'rounded-full bg-teal-500',
+		'px-2 py-0.5',
+		'text-xs font-medium text-white'
+	];
 </script>
 
 {#if element === 'a'}
-	<a {href} class={cardClasses} on:click on:keydown role="button" tabindex="0">
-		{#if featured}
-			<div
-				class="absolute top-2 right-2 z-10 rounded-full bg-teal-500 px-2 py-0.5 text-xs font-medium text-white"
-			>
-				Featured
-			</div>
+	<a
+		href={props.href}
+		class={baseClasses}
+		onclick={props.onclick}
+		onkeydown={props.onkeydown}
+		role="button"
+		tabindex="0"
+	>
+		{#if props.featured}
+			<div class={featuredBadgeClasses}>Nổi bật</div>
 		{/if}
-		{@render children()}
+		{@render props.children()}
 	</a>
 {:else if element === 'button'}
-	<button class={cardClasses} on:click={onClick} on:keydown>
-		{#if featured}
-			<div
-				class="absolute top-2 right-2 z-10 rounded-full bg-teal-500 px-2 py-0.5 text-xs font-medium text-white"
-			>
-				Featured
-			</div>
+	<button class={baseClasses} onclick={props.onclick} onkeydown={props.onkeydown}>
+		{#if props.featured}
+			<div class={featuredBadgeClasses}>Nổi bật</div>
 		{/if}
-		{@render children()}
+		{@render props.children()}
 	</button>
 {:else}
-	<div class={cardClasses}>
-		{#if featured}
-			<div
-				class="absolute top-2 right-2 z-10 rounded-full bg-teal-500 px-2 py-0.5 text-xs font-medium text-white"
-			>
-				Featured
-			</div>
+	<div class={baseClasses}>
+		{#if props.featured}
+			<div class={featuredBadgeClasses}>Nổi bật</div>
 		{/if}
-		{@render children()}
+		{@render props.children()}
 	</div>
 {/if}

@@ -88,7 +88,7 @@
 				<ol class="ml-4 list-inside list-decimal space-y-2">
 					<li>
 						Điền đầy đủ thông tin vào <a
-							href="#"
+							href={null}
 							class="font-medium text-teal-600 hover:text-teal-700"
 							>Mẫu đăng ký sử dụng cơ sở vật chất</a
 						>

@@ -2,7 +2,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
-import { db } from '$lib/server/db';
+import { getDb } from '$lib/server/db';
 import * as schema from '$lib/server/db/schema';
 import { DatabaseError } from './db/errors';
 
@@ -24,7 +24,7 @@ export function generateSessionToken() {
 }
 
 export async function createSession(platformDb: D1Database, token: string, userId: string) {
-	const client = db(platformDb);
+	const client = getDb(platformDb);
 	try {
 		const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 		const session: schema.Session = {
@@ -39,8 +39,12 @@ export async function createSession(platformDb: D1Database, token: string, userI
 	}
 }
 
-export async function validateSessionToken(platformDb: D1Database, token: string) {
-	const client = db(platformDb);
+export async function validateSessionToken(platformDb: D1Database, token: string | undefined) {
+	if (!token) {
+		return { session: null, user: null };
+	}
+
+	const client = getDb(platformDb);
 	try {
 		const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 		const [result] = await client
@@ -86,7 +90,7 @@ export async function validateSessionToken(platformDb: D1Database, token: string
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
 
 export async function invalidateSession(platformDb: D1Database, sessionId: string) {
-	const client = db(platformDb);
+	const client = getDb(platformDb);
 	try {
 		await client.delete(schema.session).where(eq(schema.session.id, sessionId));
 	} catch (error) {

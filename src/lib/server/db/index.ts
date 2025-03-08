@@ -1,53 +1,29 @@
 import { drizzle } from 'drizzle-orm/d1';
 import * as schema from './schema';
-import { DatabaseClient } from './repositories';
 
 // Export schema types
 export * from './schema';
 
-// Export database client and repositories
-export * from './repositories';
-
-// Export validators
-export * from './validators';
-
-// Create DrizzleD1Database client
-export function createDrizzleDb(platformDb: D1Database) {
+// Create a drizzle client with our schema
+export function getDb(platformDb: D1Database) {
 	if (!platformDb) {
 		throw new Error('D1 database not found in platform env');
 	}
 	return drizzle(platformDb, { schema });
 }
 
-// Helper type for DrizzleD1Database client
-export type DrizzleDb = ReturnType<typeof createDrizzleDb>;
+// Helper type for drizzle client
+export type DrizzleDb = ReturnType<typeof getDb>;
 
-// Create a complete database client with all repositories
-export class Database {
-	public readonly drizzle: DrizzleDb;
-	public readonly client: DatabaseClient;
-
-	constructor(platformDb: D1Database) {
-		this.drizzle = createDrizzleDb(platformDb);
-		this.client = new DatabaseClient(platformDb);
-	}
-}
-
-// Helper to get a database connection with full type inference
-export function getDatabase(platformDb: D1Database): Database {
-	return new Database(platformDb);
-}
-
-// Helper to wrap database operations in error handling
-export async function withDb<T>(
+// Simple wrapper for database operations with error handling
+export async function runQuery<T>(
 	platformDb: D1Database,
-	operation: (db: Database) => Promise<T>
+	operation: (db: DrizzleDb) => Promise<T>
 ): Promise<T> {
 	try {
-		const db = new Database(platformDb);
+		const db = getDb(platformDb);
 		return await operation(db);
 	} catch (error) {
-		// Re-throw database errors with proper error handling
 		if (error instanceof Error) {
 			throw error;
 		}
@@ -55,5 +31,19 @@ export async function withDb<T>(
 	}
 }
 
-// Export convenience type for database operations
-export type DbOperation<T> = (db: Database) => Promise<T>;
+// Export an initialized db instance for non-Edge environments
+let _db: DrizzleDb | null = null;
+
+export function initDb(platformDb: D1Database) {
+	if (!_db) {
+		_db = getDb(platformDb);
+	}
+	return _db;
+}
+
+export function getInitializedDb() {
+	if (!_db) {
+		throw new Error('Database not initialized. Call initDb first.');
+	}
+	return _db;
+}

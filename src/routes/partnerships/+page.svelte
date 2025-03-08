@@ -1,12 +1,13 @@
 <script lang="ts">
 	import PartnerCard from '$lib/components/PartnerCard.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
-	import { onMount } from 'svelte';
+	import { Globe2 } from 'lucide-svelte';
 	import * as d3 from 'd3';
 	import * as topojson from 'topojson-client';
-	import { Globe2 } from 'lucide-svelte';
+	import type { Partner } from '$lib/server/db/schema';
+	import type { PageData } from './$types';
 
-	interface Partner {
+	interface UIPartner {
 		logo: string;
 		name: string;
 		description: string;
@@ -21,155 +22,110 @@
 		};
 	}
 
-	const academicPartners: Partner[] = [
-		{
-			logo: 'https://brand.mit.edu/sites/default/files/styles/tile_narrow/public/2023-08/logo-colors-BG-mit-red.png?itok=Dk9W1mWh',
-			name: 'Massachusetts Institute of Technology',
-			description: 'Hợp tác nghiên cứu trong lĩnh vực công nghệ và đổi mới sáng tạo',
-			website: 'https://www.mit.edu',
-			type: 'academic',
+	function transformPartner(partner: Partner): UIPartner {
+		const isAcademic = ['university', 'institute'].includes(partner.type);
+		return {
+			logo: partner.logoUrl || '',
+			name: partner.name,
+			description: partner.description,
+			website: partner.website || '',
+			type: isAcademic ? 'academic' : 'business',
 			details: {
-				region: 'Quốc tế',
-				coordinates: [42.3601, -71.0942]
+				region: isAcademic ? (partner.country === 'Vietnam' ? 'Trong nước' : 'Quốc tế') : undefined,
+				industry: !isAcademic ? 'Công nghệ' : undefined,
+				coordinates: [partner.latitude, partner.longitude]
 			}
-		},
-		{
-			logo: 'https://logowik.com/content/uploads/images/tokyo-institute-of-technology-logo7969.logowik.com.webp',
-			name: 'Tokyo Institute of Technology',
-			description: 'Trao đổi sinh viên và nghiên cứu chung về khoa học vật liệu',
-			website: 'https://www.titech.ac.jp/english',
-			type: 'academic',
-			details: {
-				region: 'Quốc tế',
-				coordinates: [35.6062, 139.6829]
-			}
-		},
-		{
-			logo: 'https://vnu.edu.vn/home/images/logo.png',
-			name: 'Đại học Quốc gia Hà Nội',
-			description: 'Hợp tác đào tạo và nghiên cứu trong nhiều lĩnh vực',
-			website: 'https://vnu.edu.vn',
-			type: 'academic',
-			details: {
-				region: 'Trong nước',
-				coordinates: [21.0285, 105.8542]
-			}
-		}
-	];
+		};
+	}
 
-	const businessPartners: Partner[] = [
-		{
-			logo: 'https://viettel.com.vn/media/viettel/original_images/logo-color2.png',
-			name: 'Tập đoàn Viettel',
-			description: 'Hợp tác nghiên cứu và phát triển công nghệ 5G',
-			website: 'https://viettel.com.vn',
-			type: 'business',
-			details: {
-				industry: 'Công nghệ',
-				cooperationType: 'R&D, Tuyển dụng',
-				internshipInfo: 'Chương trình thực tập sinh hàng năm',
-				coordinates: [21.0245, 105.8412]
-			}
-		},
-		{
-			logo: 'https://fpt.com/-/media/project/fpt-corporation/fpt/common/images/navigation/logo/fpt-logo.svg',
-			name: 'FPT Corporation',
-			description: 'Đối tác chiến lược trong đào tạo và chuyển giao công nghệ',
-			website: 'https://fpt.com.vn',
-			type: 'business',
-			details: {
-				industry: 'Công nghệ',
-				cooperationType: 'Đào tạo, Tuyển dụng',
-				internshipInfo: 'Thực tập sinh Full-stack Developer',
-				coordinates: [21.0138, 105.8166]
-			}
-		},
-		{
-			logo: 'https://ashui.com/awards/wp-content/uploads/2015/08/Vingroup-720x405.jpg',
-			name: 'Tập đoàn Vingroup',
-			description: 'Hợp tác trong lĩnh vực nghiên cứu và phát triển xe điện',
-			website: 'https://vingroup.net',
-			type: 'business',
-			details: {
-				industry: 'Sản xuất',
-				cooperationType: 'R&D, Tài trợ',
-				internshipInfo: 'Chương trình Engineer Trainee',
-				coordinates: [21.0259, 105.8241]
-			}
-		}
-	];
-
-	let selectedType = 'all';
-	let selectedRegion = 'all';
-	let selectedIndustry = 'all';
+	let selectedType = $state('all');
+	let selectedRegion = $state('all');
+	let selectedIndustry = $state('all');
 	let mapContainer: HTMLDivElement;
 
-	$: filteredAcademicPartners = academicPartners.filter((partner) => {
-		if (selectedType !== 'all' && selectedType !== 'academic') return false;
-		if (selectedRegion !== 'all' && selectedRegion !== partner.details.region) return false;
-		return true;
-	});
+	let { data } = $props<{ data: PageData & { partners: Partner[] } }>();
 
-	$: filteredBusinessPartners = businessPartners.filter((partner) => {
-		if (selectedType !== 'all' && selectedType !== 'business') return false;
-		if (selectedIndustry !== 'all' && selectedIndustry !== partner.details.industry) return false;
-		return true;
-	});
+	const partners = data.partners.map(transformPartner);
+	const academicPartners = partners.filter((p: UIPartner) => p.type === 'academic');
+	const businessPartners = partners.filter((p: UIPartner) => p.type === 'business');
 
-	onMount(async () => {
+	let filteredAcademicPartners = $derived(
+		academicPartners.filter((partner: UIPartner) => {
+			if (selectedType !== 'all' && selectedType !== 'academic') return false;
+			if (selectedRegion !== 'all' && selectedRegion !== partner.details.region) return false;
+			return true;
+		})
+	);
+
+	let filteredBusinessPartners = $derived(
+		businessPartners.filter((partner: UIPartner) => {
+			if (selectedType !== 'all' && selectedType !== 'business') return false;
+			if (selectedIndustry !== 'all' && selectedIndustry !== partner.details.industry) return false;
+			return true;
+		})
+	);
+
+	async function initMap() {
 		if (!mapContainer) return;
 
 		const width = mapContainer.clientWidth;
 		const height = 400;
 
-		const response = await fetch('https://unpkg.com/world-atlas/countries-50m.json');
-		const world = await response.json();
+		try {
+			const response = await fetch('https://unpkg.com/world-atlas/countries-50m.json');
+			const world = await response.json();
 
-		const svg = d3.select(mapContainer).append('svg').attr('width', width).attr('height', height);
+			const svg = d3.select(mapContainer).append('svg').attr('width', width).attr('height', height);
 
-		const projection = d3
-			.geoMercator()
-			.scale(width / 2 / Math.PI)
-			.translate([width / 2, height / 2]);
+			const projection = d3
+				.geoMercator()
+				.scale(width / 2 / Math.PI)
+				.translate([width / 2, height / 2]);
 
-		const geoPath = d3.geoPath().projection(projection);
+			const geoPath = d3.geoPath().projection(projection);
 
-		// Handle TopoJSON conversion
-		const worldData = topojson.feature(world, world.objects.countries as any);
-		const countries = Array.isArray(worldData) ? worldData : (worldData as any).features || [];
+			// Convert TopoJSON to GeoJSON with simple type assertion
+			const geoJson = topojson.feature(world as any, (world as any).objects.countries);
+			const features = (geoJson as any).features;
 
-		svg
-			.append('g')
-			.selectAll('path')
-			.data(countries)
-			.join('path')
-			.attr('d', geoPath as any)
-			.attr('fill', '#e5e7eb')
-			.attr('stroke', '#d1d5db')
-			.attr('stroke-width', 0.5);
+			svg
+				.append('g')
+				.selectAll('path')
+				.data(features)
+				.join('path')
+				.attr('d', geoPath as any)
+				.attr('fill', '#e5e7eb')
+				.attr('stroke', '#d1d5db')
+				.attr('stroke-width', 0.5);
 
-		const allPartners = [...academicPartners, ...businessPartners];
+			// Add partner locations
+			svg
+				.selectAll('circle')
+				.data<UIPartner>(partners)
+				.join('circle')
+				.attr('cx', (d) => {
+					const coords = projection([d.details.coordinates[1], d.details.coordinates[0]]);
+					return coords ? coords[0] : 0;
+				})
+				.attr('cy', (d) => {
+					const coords = projection([d.details.coordinates[1], d.details.coordinates[0]]);
+					return coords ? coords[1] : 0;
+				})
+				.attr('r', 6)
+				.attr('fill', (d) => (d.type === 'academic' ? '#0ea5e9' : '#14b8a6'))
+				.attr('stroke', '#ffffff')
+				.attr('stroke-width', 1.5)
+				.attr('opacity', 0.8)
+				.append('title')
+				.text((d) => d.name);
+		} catch (error) {
+			console.error('Error loading map data:', error);
+		}
+	}
 
-		// Add partner locations
-		svg
-			.selectAll('circle')
-			.data(allPartners)
-			.join('circle')
-			.attr('cx', (d) => {
-				const coords = projection([d.details.coordinates[1], d.details.coordinates[0]]);
-				return coords ? coords[0] : 0;
-			})
-			.attr('cy', (d) => {
-				const coords = projection([d.details.coordinates[1], d.details.coordinates[0]]);
-				return coords ? coords[1] : 0;
-			})
-			.attr('r', 6)
-			.attr('fill', (d) => (d.type === 'academic' ? '#0ea5e9' : '#14b8a6'))
-			.attr('stroke', '#ffffff')
-			.attr('stroke-width', 1.5)
-			.attr('opacity', 0.8)
-			.append('title')
-			.text((d) => d.name);
+	// Initialize map on mount
+	$effect(() => {
+		initMap();
 	});
 </script>
 

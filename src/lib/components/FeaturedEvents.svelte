@@ -3,98 +3,49 @@
 	import { fade } from 'svelte/transition';
 	import BaseCard from './BaseCard.svelte';
 	import { Users, Calendar, MapPin, ChevronRight } from 'lucide-svelte';
-	interface Event {
-		id: string;
-		slug: string;
-		title: string;
-		summary: string;
-		startDate: number;
-		endDate: number;
-		location: string;
-		image: string;
-		category: string;
-		participants: number;
-	}
+	import type { Event } from '$lib/server/db/schema';
 
-	const categories = ['All', 'Workshop', 'Conference', 'Symposium', 'Competition'];
-	let selectedCategory = 'All';
+	type EventType = Event['type'];
+	type CategoryType = 'All' | EventType;
 
-	let featuredEvents: Event[] = [
-		{
-			id: '1',
-			slug: 'research-symposium-2025',
-			title: 'Annual Research Symposium 2025',
-			summary:
-				'Join us for our flagship research symposium showcasing groundbreaking student projects and innovations across multiple disciplines. Network with leading academics and industry professionals.',
-			startDate: new Date('2025-04-15T09:00:00').getTime(),
-			endDate: new Date('2025-04-15T17:00:00').getTime(),
-			location: 'Main Auditorium',
-			image: 'https://placehold.co/1200x800',
-			category: 'Symposium',
-			participants: 450
-		},
-		{
-			id: '2',
-			slug: 'ai-workshop-series',
-			title: 'AI Workshop Series',
-			summary:
-				'Hands-on workshops covering the latest developments in artificial intelligence and machine learning',
-			startDate: new Date('2025-04-20T14:00:00').getTime(),
-			endDate: new Date('2025-04-22T17:00:00').getTime(),
-			location: 'Innovation Lab',
-			image: 'https://placehold.co/800x600',
-			category: 'Workshop',
-			participants: 120
-		},
-		{
-			id: '3',
-			slug: 'tech-hackathon',
-			title: 'Innovation Hackathon 2025',
-			summary:
-				'48-hour hackathon challenging students to solve real-world problems with technology',
-			startDate: new Date('2025-05-01T09:00:00').getTime(),
-			endDate: new Date('2025-05-03T09:00:00').getTime(),
-			location: 'Engineering Building',
-			image: 'https://placehold.co/800x600',
-			category: 'Competition',
-			participants: 200
-		},
-		{
-			id: '4',
-			slug: 'robotics-conference',
-			title: 'Student Robotics Conference',
-			summary: 'Annual conference featuring student research in robotics and automation',
-			startDate: new Date('2025-05-10T10:00:00').getTime(),
-			endDate: new Date('2025-05-11T17:00:00').getTime(),
-			location: 'Conference Center',
-			image: 'https://placehold.co/800x600',
-			category: 'Conference',
-			participants: 300
-		},
-		{
-			id: '5',
-			slug: 'data-science-workshop',
-			title: 'Applied Data Science Workshop',
-			summary: 'Practical workshop on data analysis and visualization techniques',
-			startDate: new Date('2025-05-15T13:00:00').getTime(),
-			endDate: new Date('2025-05-15T17:00:00').getTime(),
-			location: 'Computer Lab B',
-			image: 'https://placehold.co/800x600',
-			category: 'Workshop',
-			participants: 80
-		}
+	const categories: CategoryType[] = [
+		'All',
+		'workshop',
+		'competition',
+		'cultural',
+		'research',
+		'synposium'
 	];
 
-	$: filteredEvents =
-		selectedCategory === 'All'
-			? featuredEvents
-			: featuredEvents.filter((event) => event.category === selectedCategory);
+	let { events = [] }: { events: Event[] } = $props();
+	let selectedCategory = $state<CategoryType>('All');
 
-	$: smallEvents = filteredEvents.slice(0, 4);
-	$: heroEvent = filteredEvents[4] || filteredEvents[filteredEvents.length - 1];
+	const categoryLabels: Record<CategoryType, string> = {
+		All: 'Tất cả',
+		workshop: 'Hội thảo',
+		competition: 'Cuộc thi',
+		cultural: 'Văn hóa',
+		research: 'Nghiên cứu',
+		synposium: 'Hội nghị'
+	};
+
+	let filteredEvents = $derived(
+		selectedCategory === 'All' ? events : events.filter((event) => event.type === selectedCategory)
+	);
+
+	let heroEvent = $derived(filteredEvents[4] || filteredEvents[filteredEvents.length - 1]);
+	let smallEvents = $derived(filteredEvents.slice(0, 4));
+
+	// Placeholder until we add it to the schema
+	const getParticipants = (event: Event) =>
+		event.capacity || Math.floor(Math.random() * 1000) + 100;
 
 	function formatParticipants(count: number): string {
 		return count >= 1000 ? `${(count / 1000).toFixed(1)}K` : count.toString();
+	}
+
+	function getCategoryLabel(type: EventType): string {
+		return categoryLabels[type] || type;
 	}
 </script>
 
@@ -110,13 +61,17 @@
 			<div class="mt-8 flex flex-wrap justify-center gap-2">
 				{#each categories as category}
 					<button
-						class="rounded-full px-4 py-2 text-sm font-medium transition-colors
-                {selectedCategory === category
-							? 'bg-cardinal-600 text-chalk-100'
-							: 'bg-chalk-200 hover:bg-cardinal-50 hover:text-cardinal-600 active:bg-cardinal-100 text-slate-600'}"
-						on:click={() => (selectedCategory = category)}
+						class={[
+							'rounded-full px-4 py-2 text-sm font-medium transition-colors',
+							{
+								'bg-cardinal-600 text-chalk-100': selectedCategory === category,
+								'bg-chalk-200 hover:bg-cardinal-50 hover:text-cardinal-600 active:bg-cardinal-100 text-slate-600':
+									selectedCategory !== category
+							}
+						]}
+						onclick={() => (selectedCategory = category)}
 					>
-						{category}
+						{categoryLabels[category]}
 					</button>
 				{/each}
 			</div>
@@ -135,7 +90,7 @@
 							hoverScale={true}
 						>
 							<img
-								src={event.image}
+								src={event.imageUrl || 'https://placehold.co/800x600'}
 								alt={event.title}
 								class="h-48 w-full object-cover transition-transform group-hover:scale-105"
 								loading="lazy"
@@ -147,16 +102,18 @@
 											<span
 												class="bg-cardinal-50 text-cardinal-600 ring-cardinal-200 inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1"
 											>
-												{event.category}
+												{getCategoryLabel(event.type)}
 											</span>
 											<span class="flex items-center gap-1">
 												<Users class="h-4 w-4" />
-												{formatParticipants(event.participants)}
+												{formatParticipants(getParticipants(event))}
 											</span>
 										</div>
 										<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
 											<Calendar class="h-4 w-4" />
-											<span>{formatDate(event.startDate)} - {formatDate(event.endDate)}</span>
+											<span>
+												{formatDate(event.startDate)} - {formatDate(event.endDate)}
+											</span>
 										</div>
 										<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
 											<MapPin class="h-4 w-4" />
@@ -190,7 +147,7 @@
 							hoverScale={true}
 						>
 							<img
-								src={heroEvent.image}
+								src={heroEvent.imageUrl || 'https://placehold.co/1200x800'}
 								alt={heroEvent.title}
 								class="h-72 w-full object-cover transition-transform duration-300 group-hover:scale-105 sm:h-96"
 								loading="eager"
@@ -202,18 +159,18 @@
 											<span
 												class="bg-cardinal-50 text-cardinal-600 ring-cardinal-200 inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1"
 											>
-												{heroEvent.category}
+												{getCategoryLabel(heroEvent.type)}
 											</span>
 											<span class="flex items-center gap-1">
 												<Users class="h-4 w-4" />
-												{formatParticipants(heroEvent.participants)}
+												{formatParticipants(getParticipants(heroEvent))}
 											</span>
 										</div>
 										<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
 											<Calendar class="h-4 w-4" />
-											<span
-												>{formatDate(heroEvent.startDate)} - {formatDate(heroEvent.endDate)}</span
-											>
+											<span>
+												{formatDate(heroEvent.startDate)} - {formatDate(heroEvent.endDate)}
+											</span>
 										</div>
 										<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
 											<MapPin class="h-4 w-4" />
@@ -224,7 +181,7 @@
 										{heroEvent.title}
 									</h3>
 									<p class="mb-6 font-sans text-slate-600">
-										{heroEvent.summary}
+										{heroEvent.shortDescription}
 									</p>
 								</div>
 								<div
@@ -240,7 +197,7 @@
 			</div>
 		{:else}
 			<div class="text-center text-slate-500 dark:text-slate-400">
-				No events found for this category.
+				Không tìm thấy sự kiện nào trong danh mục này.
 			</div>
 		{/if}
 
