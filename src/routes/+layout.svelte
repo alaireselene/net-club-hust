@@ -4,6 +4,7 @@
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/state';
 	import Breadcrumb from '$lib/components/Breadcrumb.svelte';
+	import type { Club, School } from '$lib/server/db/schema';
 	import {
 		Calendar,
 		ChevronDownIcon,
@@ -19,150 +20,20 @@
 	let mobileMenuOpen = $state(false);
 	let currentLang = $state('VI');
 
-	const networkData = [
-		{
-			id: 1,
-			name: 'Trường CNTT&TT',
-			shortName: 'SOICT',
-			clubs: [
-				{
-					id: 101,
-					name: 'Data Science Club',
-					description: 'Exploring data analytics and machine learning',
-					members: 45
-				},
-				{
-					id: 102,
-					name: 'Web Development Hub',
-					description: 'Building modern web applications',
-					members: 38
-				}
-			]
-		},
-		{
-			id: 2,
-			name: 'Trường Hóa & KHSS',
-			shortName: 'SCLS',
-			clubs: [
-				{
-					id: 201,
-					name: 'Green Chemistry Club',
-					description: 'Sustainable chemical processes research',
-					members: 32
-				}
-			]
-		},
-		{
-			id: 3,
-			name: 'Trường Cơ khí',
-			shortName: 'SME',
-			clubs: [
-				{
-					id: 301,
-					name: 'Robotics Research Club',
-					description: 'Advanced robotics and automation',
-					members: 50
-				},
-				{
-					id: 302,
-					name: 'CAD/CAM Innovation',
-					description: 'Digital manufacturing technologies',
-					members: 28
-				}
-			]
-		},
-		{
-			id: 4,
-			name: 'Trường Điện-Điện tử',
-			shortName: 'SEEE',
-			clubs: [
-				{
-					id: 401,
-					name: 'Renewable Energy Club',
-					description: 'Sustainable energy solutions research',
-					members: 40
-				}
-			]
-		},
-		{
-			id: 5,
-			name: 'Trường Vật liệu',
-			shortName: 'SMSE',
-			clubs: [
-				{
-					id: 501,
-					name: 'Materials Science Society',
-					description: 'Advancing materials research and development',
-					members: 35
-				}
-			]
-		},
-		{
-			id: 6,
-			name: 'Trường Kinh tế',
-			shortName: 'SEM',
-			clubs: [
-				{
-					id: 601,
-					name: 'Economics Research Group',
-					description: 'Analyzing economic trends and policies',
-					members: 25
-				}
-			]
-		},
-		{
-			id: 7,
-			name: 'Khoa Toán-Tin',
-			shortName: 'FAMI',
-			clubs: [
-				{
-					id: 701,
-					name: 'Mathematics Society',
-					description: 'Promoting mathematical research and education',
-					members: 30
-				}
-			]
-		},
-		{
-			id: 8,
-			name: 'Khoa VLKT',
-			shortName: 'SEP',
-			clubs: [
-				{
-					id: 801,
-					name: 'Physics Club',
-					description: 'Exploring fundamental physics concepts',
-					members: 20
-				}
-			]
-		},
-		{
-			id: 9,
-			name: 'Khoa Ngoại ngữ',
-			shortName: 'FOFL',
-			clubs: [
-				{
-					id: 901,
-					name: 'Language Exchange Club',
-					description: 'Practicing foreign language skills',
-					members: 15
-				}
-			]
-		},
-		{
-			id: 10,
-			name: 'Khoa Khoa học & CNGD',
-			shortName: 'FED',
-			clubs: [
-				{
-					id: 1001,
-					name: 'Environmental Science Club',
-					description: 'Studying environmental issues and solutions',
-					members: 18
-				}
-			]
+	let { data, children } = $props();
+	const { schools, clubs } = data;
+
+	// Group clubs by schoolId for efficient lookup
+	const clubsBySchool = clubs.reduce<Record<number, Club[]>>((acc, club) => {
+		const schoolId = club.schoolId;
+		if (schoolId) {
+			if (!acc[schoolId]) {
+				acc[schoolId] = [];
+			}
+			acc[schoolId].push(club);
 		}
-	];
+		return acc;
+	}, {});
 
 	function toggleMobileMenu() {
 		mobileMenuOpen = !mobileMenuOpen;
@@ -185,8 +56,6 @@
 			document.removeEventListener('click', handleClickOutside);
 		};
 	});
-
-	let { children } = $props();
 </script>
 
 <div
@@ -332,16 +201,16 @@
 							class="invisible absolute left-0 z-50 mt-2 w-64 transform opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100"
 						>
 							<div class="ring-opacity-5 rounded-lg bg-white py-2 shadow-lg ring-1 ring-black">
-								{#each networkData as school}
+								{#each schools as school}
 									<div class="group/school relative px-4 py-2 hover:bg-slate-50">
 										<a
-											href="/network?school={school.shortName}"
+											href="/network?school={school.slug.toUpperCase()}"
 											class="flex items-center justify-between"
 										>
 											<span class="text-sm text-slate-700">{school.name}</span>
 											<span
 												class="ml-2 rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"
-												>{school.shortName}</span
+												>{school.slug.toUpperCase()}</span
 											>
 										</a>
 										<!-- Clubs Submenu -->
@@ -351,9 +220,9 @@
 											<div
 												class="ring-opacity-5 rounded-lg bg-white py-2 shadow-lg ring-1 ring-black"
 											>
-												{#each school.clubs as club}
+												{#each clubsBySchool[school.id] || [] as club}
 													<a
-														href="/network/{club.id}"
+														href="/network/{club.slug}"
 														class="hover:text-cardinal-600 block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
 													>
 														{club.name}
@@ -479,23 +348,23 @@
 					<!-- Network Section in Mobile Menu -->
 					<div class="my-2">
 						<div class="px-3 py-2 text-base font-medium text-slate-700">Mạng lưới</div>
-						{#each networkData as school}
+						{#each schools as school}
 							<div class="mb-3 ml-4">
 								<a
-									href="/network?school={school.shortName}"
+									href="/network?school={school.slug.toUpperCase()}"
 									class="hover:text-cardinal-600 block py-2 text-sm font-medium text-slate-600"
 								>
 									{school.name}
 									<span
 										class="ml-2 rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"
 									>
-										{school.shortName}
+										{school.slug.toUpperCase()}
 									</span>
 								</a>
 								<div class="ml-4">
-									{#each school.clubs as club}
+									{#each clubsBySchool[school.id] || [] as club}
 										<a
-											href="/network/{club.id}"
+											href="/network/{club.slug}"
 											class="hover:text-cardinal-600 block py-1.5 text-sm text-slate-600"
 										>
 											{club.name}
