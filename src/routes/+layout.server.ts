@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { runQuery } from '$lib/server/db';
 import { club, school, type Club, type School } from '$lib/server/db/schema';
+import { desc } from 'drizzle-orm';
 
 export const load = async ({ platform }) => {
   if (!platform?.env?.DB) {
@@ -10,7 +11,7 @@ export const load = async ({ platform }) => {
   return await runQuery(platform.env.DB, async (db) => {
     // Get all schools and clubs
     const [schools, clubs]: [schools: School[], clubs: Club[]] = await Promise.all([
-      db.select().from(school).orderBy(school.name),
+      db.select().from(school).orderBy(desc(school.name)),
       db.select().from(club).orderBy(club.name)
     ]);
 
