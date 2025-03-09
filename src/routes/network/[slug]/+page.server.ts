@@ -51,13 +51,36 @@ export const load = async ({ platform, params }) => {
       )
       .orderBy(sql`CASE WHEN ${userInClub.role} = 'president' THEN 0 ELSE 1 END, ${userInClub.joinedAt}`);
 
+    // Create breadcrumb data
+    const breadcrumb = [
+      {
+        text: 'Mạng lưới',
+        href: '/network'
+      }
+    ];
+
+    // Add school segment if available
+    if (clubDetails.school) {
+      breadcrumb.push({
+        text: clubDetails.school.name,
+        href: `/network?school=${clubDetails.school.slug.toUpperCase()}`
+      });
+    }
+
+    // Add club segment
+    breadcrumb.push({
+      text: clubDetails.club.name,
+      href: `/network/${clubDetails.club.slug}`
+    });
+
     return {
       club: clubDetails.club,
       school: clubDetails.school,
       leadership: {
         president: president?.role === 'president' ? president : null,
         advisors: president?.role === 'president' ? advisors : [president, ...advisors]
-      }
+      },
+      breadcrumb
     };
   });
 };

@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { runQuery } from '$lib/server/db';
 import { club, school } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
 
 export const load = async ({ platform, url }) => {
   if (!platform?.env?.DB) {
@@ -28,10 +29,30 @@ export const load = async ({ platform, url }) => {
       return acc;
     }, {} as Record<number, typeof clubs>);
 
+    // Create breadcrumb data
+    const breadcrumb = [
+      {
+        text: 'Mạng lưới',
+        href: '/network'
+      }
+    ];
+
+    // Add school to breadcrumb if filtered
+    if (schoolFilter) {
+      const filteredSchool = schools.find(s => s.slug.toUpperCase() === schoolFilter);
+      if (filteredSchool) {
+        breadcrumb.push({
+          text: filteredSchool.name,
+          href: `/network?school=${schoolFilter}`
+        });
+      }
+    }
+
     return {
       schools,
       clubsBySchool,
-      schoolFilter
+      schoolFilter,
+      breadcrumb
     };
   });
 };

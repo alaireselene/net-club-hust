@@ -7,7 +7,7 @@
 	import { Select } from 'bits-ui';
 
 	let { data } = $props();
-	const { schools, clubsBySchool } = data;
+	const { schools, clubsBySchool, schoolFilter } = $derived(data);
 
 	// Convert schools to select options
 	const schoolOptions = [
@@ -20,7 +20,12 @@
 	];
 
 	let searchQuery = $state('');
-	let value = $state('');
+	// Initialize value based on URL filter
+	let value = $state(
+		schoolFilter
+			? (schools.find((s) => s.slug.toUpperCase() === schoolFilter)?.id.toString() ?? '')
+			: ''
+	);
 
 	const selectedLabel = $derived(
 		schoolOptions.find((option) => option.value === value)?.label ?? 'Chọn trường'
@@ -32,7 +37,7 @@
 	$effect(() => {
 		const url = new URL(window.location.href);
 		if (selectedSchool) {
-			url.searchParams.set('school', selectedSchool.slug);
+			url.searchParams.set('school', selectedSchool.slug.toUpperCase());
 		} else {
 			url.searchParams.delete('school');
 		}

@@ -121,12 +121,13 @@
 
 				<!-- Mobile Menu Button -->
 				<button
-					class="menu-button hover:text-cardinal-600 focus:ring-cardinal-600 rounded-md p-2 text-slate-600 hover:bg-slate-50 focus:ring-2 focus:ring-offset-2 focus:outline-none md:hidden"
+					class="menu-button focus:ring-chalk-100 text-chalk-100 hover:text-chalk-200 hover:bg-cardinal-600/50 rounded-md p-2 focus:ring-2 focus:ring-offset-2 focus:outline-none md:hidden"
 					onclick={toggleMobileMenu}
 					aria-expanded={mobileMenuOpen}
 					aria-controls="mobile-menu"
 					aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
 				>
+					<MenuIcon class="h-6 w-6" />
 				</button>
 			</div>
 		</div>
@@ -285,10 +286,10 @@
 				<div class="text-lg font-medium text-slate-900">Menu</div>
 				<button
 					onclick={toggleMobileMenu}
-					class="hover:text-cardinal-600 focus:ring-cardinal-600 rounded-md p-2 text-slate-600 hover:bg-slate-50 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+					class="focus:ring-cardinal-600 hover:text-cardinal-600 rounded-md p-2 text-slate-600 hover:bg-slate-50 focus:ring-2 focus:ring-offset-2 focus:outline-none"
 					aria-label="Close menu"
 				>
-					<MenuIcon class="h-6 w-6" />
+					<MenuIcon class="h-6 w-6 fill-current" />
 				</button>
 			</div>
 			<nav class="px-2 py-3">
@@ -424,18 +425,11 @@
 						</p>
 						<div class="flex space-x-4">
 							<a
-								href={null}
+								href="https://www.facebook.com/BKEntrepreneurshipCenter"
 								class="hover:text-cardinal-600 text-slate-500 transition-colors"
 								aria-label="Follow us on Facebook"
 							>
 								<Facebook class="h-6 w-6" />
-							</a>
-							<a
-								href={null}
-								class="hover:text-cardinal-600 text-slate-500 transition-colors"
-								aria-label="Follow us on Youtube"
-							>
-								<Youtube class="h-6 w-6" />
 							</a>
 						</div>
 					</div>
@@ -487,21 +481,21 @@
 							<li class="flex items-start">
 								<MapPin class="mr-3 h-5 w-5 text-slate-400" />
 								<div>
-									Phòng 204 - C1<br />
+									Tầng 2, Tòa Digital Hub<br />
 									Đại học Bách khoa Hà Nội<br />
 									Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội
 								</div>
 							</li>
 							<li class="flex items-center">
 								<Mail class="mr-3 h-5 w-5 text-slate-400" />
-								<a href="mailto:sv@hust.edu.vn" class="hover:text-cardinal-600 transition-colors">
-									sv@hust.edu.vn
+								<a href="mailto:stkn@hust.edu.vn" class="hover:text-cardinal-600 transition-colors">
+									stkn@hust.edu.vn
 								</a>
 							</li>
 							<li class="flex items-center">
 								<Phone class="mr-3 h-5 w-5 text-slate-400" />
-								<a href="tel:02438692122" class="hover:text-cardinal-600 transition-colors">
-									(024) 3869 2122
+								<a href="tel:0934788266" class="hover:text-cardinal-600 transition-colors">
+									0934788266
 								</a>
 							</li>
 						</ul>
