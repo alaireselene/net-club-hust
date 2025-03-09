@@ -8,17 +8,18 @@
 	const { club, school, leadership = { president: null, advisors: [] } } = $derived(data);
 
 	// Format date to display year only
-	const establishedYear = new Date(club.establishedAt).getFullYear();
+	const establishedYear = $derived(new Date(club.establishedAt).getFullYear());
 
 	// Format member names with fallbacks
-	const presidentName = leadership?.president?.fullName || 'Chưa có';
-	const advisorNames =
+	const presidentName = $derived(leadership?.president?.fullName || 'Chưa có');
+	const advisorNames = $derived(
 		leadership?.advisors?.length > 0
 			? leadership.advisors
 					.map((a) => a?.fullName)
 					.filter(Boolean)
 					.join(', ')
-			: 'Chưa có';
+			: 'Chưa có'
+	);
 </script>
 
 {#if club}
