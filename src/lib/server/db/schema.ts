@@ -1,28 +1,36 @@
-import { sqliteTable as table, text, int, integer, index, uniqueIndex, real, primaryKey } from 'drizzle-orm/sqlite-core';
+import {
+	sqliteTable as table,
+	text,
+	int,
+	integer,
+	index,
+	uniqueIndex,
+	real,
+	primaryKey
+} from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
 
 // Timestamp tracking columns
 const timestamp = {
-	createdAt: integer({ mode: 'timestamp' }).$default(() => sql`(strftime('%s','now'))`).notNull(),
+	createdAt: integer({ mode: 'timestamp' })
+		.$default(() => sql`(strftime('%s','now'))`)
+		.notNull(),
 	updatedAt: integer({ mode: 'timestamp' }).$onUpdate(() => sql`(strftime('%s', 'now')`)
-}
+};
 
 // User & Authentication
 export const user = table(
 	'user',
 	{
 		id: int().primaryKey({ autoIncrement: true }),
-		email: text({ length: 255 })
-			.notNull()
-			.$type<`${string}@${string}.${string}`>(),
+		email: text({ length: 255 }).notNull().$type<`${string}@${string}.${string}`>(),
 		fullName: text().notNull(),
 		bio: text(),
 		passwordHash: text(),
 		avatarUrl: text(),
 		...timestamp
-	}, (table) => [
-		uniqueIndex('user_email_idx').on(table.email),
-	]
+	},
+	(table) => [uniqueIndex('user_email_idx').on(table.email)]
 );
 
 // Clubs & Network
@@ -38,29 +46,36 @@ export const club = table(
 		schoolId: int().references(() => school.id, { onDelete: 'set null' }),
 		establishedAt: integer({ mode: 'timestamp' }).notNull(),
 		...timestamp
-	}, (table) => [
-		uniqueIndex('club_slug_idx').on(table.slug),
-	]
+	},
+	(table) => [uniqueIndex('club_slug_idx').on(table.slug)]
 );
 
 // Schools & Faculties
-export const school = table('school', {
-	id: int().primaryKey({ autoIncrement: true }),
-	name: text({ length: 255 }).notNull(),
-	slug: text({ length: 100 }).notNull().unique(),
-	...timestamp
-}, (table) => [
-	index('school_name_idx').on(table.name)
-]);
+export const school = table(
+	'school',
+	{
+		id: int().primaryKey({ autoIncrement: true }),
+		name: text({ length: 255 }).notNull(),
+		slug: text({ length: 100 }).notNull().unique(),
+		...timestamp
+	},
+	(table) => [index('school_name_idx').on(table.name)]
+);
 
-export const userInClub = table('user_in_club', {
-	id: int().primaryKey({ autoIncrement: true }),
-	userId: int().notNull().references(() => user.id, { onDelete: 'cascade' }),
-	clubId: int().notNull().references(() => club.id, { onDelete: 'cascade' }),
-	role: text({ length: 20 }).$type<"member" | "president" | "advisor">().default('member'),
-	joinedAt: integer({ mode: 'timestamp' }).notNull(),
-	...timestamp
-},
+export const userInClub = table(
+	'user_in_club',
+	{
+		id: int().primaryKey({ autoIncrement: true }),
+		userId: int()
+			.notNull()
+			.references(() => user.id, { onDelete: 'cascade' }),
+		clubId: int()
+			.notNull()
+			.references(() => club.id, { onDelete: 'cascade' }),
+		role: text({ length: 20 }).$type<'member' | 'president' | 'advisor'>().default('member'),
+		joinedAt: integer({ mode: 'timestamp' }).notNull(),
+		...timestamp
+	},
 	(table) => [
 		uniqueIndex('user_in_club_unique_idx').on(table.userId, table.clubId),
 		index('user_in_club_user_idx').on(table.userId),
@@ -69,36 +84,37 @@ export const userInClub = table('user_in_club', {
 );
 
 // Events
-export const event = table(
-	'event',
-	{
-		id: int().primaryKey({ autoIncrement: true }),
-		title: text({ length: 255 }).notNull(),
-		summary: text({ length: 500 }).notNull(),
-		description: text({ length: 5000 }).notNull(),
-		location: text({ length: 255 }).notNull(),
-		startDate: integer({ mode: 'timestamp' }).notNull(),
-		endDate: integer({ mode: 'timestamp' }).notNull(),
-		type: text({ length: 20 }).$type<'workshop' | 'competition' | 'cultural' | 'research' | 'symposium'>().notNull(),
-		imageUrl: text({ length: 255 }),
-		capacity: integer().default(0),
-		organizerId: int()
-			.notNull()
-			.references(() => club.id, { onDelete: 'cascade' }),
-		...timestamp
-	}
-);
+export const event = table('event', {
+	id: int().primaryKey({ autoIncrement: true }),
+	title: text({ length: 255 }).notNull(),
+	summary: text({ length: 500 }).notNull(),
+	description: text({ length: 5000 }).notNull(),
+	location: text({ length: 255 }).notNull(),
+	startDate: integer({ mode: 'timestamp' }).notNull(),
+	endDate: integer({ mode: 'timestamp' }).notNull(),
+	type: text({ length: 20 })
+		.$type<'workshop' | 'competition' | 'cultural' | 'research' | 'symposium'>()
+		.notNull(),
+	imageUrl: text({ length: 255 }),
+	capacity: integer().default(0),
+	organizerId: int()
+		.notNull()
+		.references(() => club.id, { onDelete: 'cascade' }),
+	...timestamp
+});
 
 // Sponsors
-export const sponsor = table('sponsor', {
-	id: int().primaryKey({ autoIncrement: true }),
-	name: text({ length: 255 }).notNull(),
-	logoUrl: text({ length: 255 }).notNull(),
-	websiteUrl: text({ length: 255 }).notNull(),
-	...timestamp
-}, (table) => [
-	index('sponsor_name_idx').on(table.name)
-]);
+export const sponsor = table(
+	'sponsor',
+	{
+		id: int().primaryKey({ autoIncrement: true }),
+		name: text({ length: 255 }).notNull(),
+		logoUrl: text({ length: 255 }).notNull(),
+		websiteUrl: text({ length: 255 }).notNull(),
+		...timestamp
+	},
+	(table) => [index('sponsor_name_idx').on(table.name)]
+);
 
 export const eventSponsor = table(
 	'event_sponsor',
@@ -127,7 +143,8 @@ export const research = table(
 		name: text({ length: 255 }).notNull(),
 		abstract: text({ length: 2000 }).notNull(),
 		link: text({ length: 500 }),
-		status: text({ length: 20 }).$type<'active' | 'completed' | 'published'>()
+		status: text({ length: 20 })
+			.$type<'active' | 'completed' | 'published'>()
 			.notNull()
 			.default('active'),
 		publishedTime: integer({ mode: 'timestamp' }),
@@ -149,7 +166,7 @@ export const userInResearch = table(
 		userId: int()
 			.notNull()
 			.references(() => user.id, { onDelete: 'cascade' }),
-		role: text({ length: 20 }).$type<"main_author" | "co_author" | "advisor">().notNull(),
+		role: text({ length: 20 }).$type<'main_author' | 'co_author' | 'advisor'>().notNull(),
 		...timestamp
 	},
 	(table) => [
@@ -167,7 +184,9 @@ export const post = table(
 		title: text({ length: 255 }).notNull(),
 		summary: text({ length: 500 }),
 		content: text({ length: 10000 }).notNull(),
-		category: text({ length: 20 }).$type<'news' | 'announcement' | 'research' | 'achievement'>().notNull(),
+		category: text({ length: 20 })
+			.$type<'news' | 'announcement' | 'research' | 'achievement'>()
+			.notNull(),
 		featuredImageUrl: text({ length: 255 }),
 		authorId: int()
 			.notNull()
@@ -182,36 +201,45 @@ export const post = table(
 );
 
 // Resources & Facilities
-export const resource = table('resource', {
-	id: int().primaryKey({ autoIncrement: true }),
-	title: text({ length: 255 }).notNull(),
-	description: text({ length: 1000 }).notNull(),
-	type: text({ length: 20 }).$type<'document' | 'presentation' | 'video' | 'link'>().notNull(),
-	url: text({ length: 500 }).notNull(),
-	category: text({ length: 20 }).$type<'tools' | 'training' | 'documentation' | 'paper'>().notNull(),
-	uploaderId: int()
-		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' }),
-	...timestamp
-}, (table) => [
-	index('resource_uploader_idx').on(table.uploaderId),
-	index('resource_type_idx').on(table.type),
-	index('resource_category_idx').on(table.category)
-]);
+export const resource = table(
+	'resource',
+	{
+		id: int().primaryKey({ autoIncrement: true }),
+		title: text({ length: 255 }).notNull(),
+		description: text({ length: 1000 }).notNull(),
+		type: text({ length: 20 }).$type<'document' | 'presentation' | 'video' | 'link'>().notNull(),
+		url: text({ length: 500 }).notNull(),
+		category: text({ length: 20 })
+			.$type<'tools' | 'training' | 'documentation' | 'paper'>()
+			.notNull(),
+		uploaderId: int()
+			.notNull()
+			.references(() => user.id, { onDelete: 'cascade' }),
+		...timestamp
+	},
+	(table) => [
+		index('resource_uploader_idx').on(table.uploaderId),
+		index('resource_type_idx').on(table.type),
+		index('resource_category_idx').on(table.category)
+	]
+);
 
-export const facility = table('facility', {
-	id: int().primaryKey({ autoIncrement: true }),
-	name: text({ length: 255 }).notNull(),
-	description: text({ length: 1000 }).notNull(),
-	location: text({ length: 255 }).notNull(),
-	status: text({ length: 20 }).$type<'available' | 'maintenance' | 'unavailable'>()
-		.notNull()
-		.default('available'),
-	imageUrl: text({ length: 255 }),
-	...timestamp
-}, (table) => [
-	index('facility_status_idx').on(table.status)
-]);
+export const facility = table(
+	'facility',
+	{
+		id: int().primaryKey({ autoIncrement: true }),
+		name: text({ length: 255 }).notNull(),
+		description: text({ length: 1000 }).notNull(),
+		location: text({ length: 255 }).notNull(),
+		status: text({ length: 20 })
+			.$type<'available' | 'maintenance' | 'unavailable'>()
+			.notNull()
+			.default('available'),
+		imageUrl: text({ length: 255 }),
+		...timestamp
+	},
+	(table) => [index('facility_status_idx').on(table.status)]
+);
 
 // Partners
 export const partner = table(
@@ -219,7 +247,9 @@ export const partner = table(
 	{
 		id: int().primaryKey({ autoIncrement: true }),
 		name: text({ length: 255 }).notNull(),
-		type: text({ length: 20 }).$type<'university' | 'company' | 'institute' | 'club' | 'other'>().notNull(),
+		type: text({ length: 20 })
+			.$type<'university' | 'company' | 'institute' | 'club' | 'other'>()
+			.notNull(),
 		description: text({ length: 1000 }).notNull(),
 		website: text({ length: 255 }),
 		logoUrl: text({ length: 255 }),

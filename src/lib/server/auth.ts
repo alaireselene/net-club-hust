@@ -136,8 +136,5 @@ export function isClubMember(user: AuthUser | null, clubId: string): boolean {
 }
 
 export function canManageClub(user: AuthUser | null, clubId: string): boolean {
-	return (
-		isAdmin(user) ||
-		(isClubLeader(user) && user?.clubId === clubId)
-	);
+	return isAdmin(user) || (isClubLeader(user) && user?.clubId === clubId);
 }
