@@ -1,306 +1,109 @@
-<rules>
-  <project-description>
-    <name>Student Research Clubs Network Portal</name>
-    <description>Website for the Student Research Clubs Network under the  Innovation and Entrepreneurship Center, Hanoi University of Science and Technology. The platform serves as a central hub for managing research club activities, events, and resources.</description>
-    <core-features>
-      <feature>Dynamic homepage with featured news and events</feature>
-      <feature>Categorized news section with filtering capabilities</feature>
-      <feature>Interactive network visualization using D3.js</feature>
-      <feature>Weekly schedule management system</feature>
-      <feature>Resource sharing and facility management</feature>
-      <feature>Full Vietnamese content</feature>
-      <feature>Content management system for blog posts and resources</feature>
-      <feature>Member management and access control</feature>
-      <feature>Site configuration and settings management</feature>
-      <feature>User-generated content submission system</feature>
-      <feature>Club leadership and advisor management system</feature>
-      <feature>Club collaboration and networking tools</feature>
-      <feature>Cross-club event planning and scheduling</feature>
-      <feature>Mentorship connection platform</feature>
-      <feature>Club activity documentation and archiving</feature>
-    </core-features>
-  </project-description>
+# Student Research Clubs Network Portal - Guidelines
 
-  <design-theme>
-    <concept>Modern academic institution blending innovation with tradition</concept>
-    <principles>
-      <principle>Modern and innovative interface with clean, minimalist aesthetics</principle>
-      <principle>Academic professionalism reflecting university heritage</principle>
-      <principle>Dynamic elements showcasing research and innovation</principle>
-      <principle>Traditional Vietnamese design motifs in modern context</principle>
-      <principle>Connected network visualization emphasizing collaboration</principle>
-      <principle>Growth-oriented visuals representing student development</principle>
-      <principle>International academic standards with local cultural elements</principle>
-    </principles>
-    <colors>
-      <color>Cardinal Red (RGB: 206, 22, 40) - Main brand color representing strength and determination</color>
-      <color>Navy Blue (RGB: 0, 51, 102) - Secondary color representing professionalism and trust</color>
-      <color>Sunflower Yellow (RGB: 243, 193, 8) - Accent color representing energy and optimism</color>
-      <color>Charcoal Gray (RGB: 35, 32, 32) - Neutral color for text and backgrounds</color>
-      <color>Crimson Red (RGB: 192, 32, 52) - Secondary red for dynamic accents</color>
-      <color>Tangerine Orange (RGB: 245, 127, 32) - Accent color for calls-to-action</color>
-      <color>Chalk White - Clean backgrounds and text contrast</color>
-    </colors>
-    <typography>
-      <style>Clean, modern sans-serif for primary text</style>
-      <style>Professional serif for academic content</style>
-      <style>Geometric sans for innovative elements</style>
-    </typography>
-    <visual-elements>
-      <element>Modern grid layouts with traditional proportions</element>
-      <element>Network visualization with cultural pattern influences</element>
-      <element>Clean cards with subtle traditional decorative elements</element>
-      <element>Interactive elements with smooth, professional animations</element>
-      <element>Minimalist icons incorporating traditional symbols</element>
-      <element>Cardinal red highlights for primary actions and emphasis</element>
-      <element>Navy blue accents for secondary information</element>
-      <element>Sunflower yellow for attention-grabbing elements</element>
-      <element>Consistent color hierarchy across components</element>
-      <element>White space utilizing Chalk White for readability</element>
-    </visual-elements>
-  </design-theme>
+## Overview
+- Purpose: Centralized platform for HUST research club activities, events, and resources
+- Core Features: Dynamic homepage, news, D3.js network visualization, schedules, resource sharing, Vietnamese support, CMS, member/club management
 
-  <technologies>
-  <core>
-    <tech>Svelte 5 for app framework</tech>
-    <tech>SvelteKit 2.x for app framework</tech>
-    <tech>TypeScript 5.x for type safety with runes</tech>
-    <tech>Vite 6.x for build tooling</tech>
-    <tech>@sveltejs/adapter-cloudflare for Cloudflare deployment</tech>
-    <tech>Bits UI for headless component primitives</tech>
-  </core>
-    <cloudflare>
-      <tech>Cloudflare Pages for hosting and deployment</tech>
-      <tech>Cloudflare D1 for serverless SQLite database</tech>
-      <tech>Cloudflare R2 for S3-compatible object storage</tech>
-      <tech>Cloudflare Images for image optimization and CDN</tech>
-    </cloudflare>
-    <styling>
-      <tech>Tailwind CSS 4.x for utility-first styling</tech>
-      <tech>@tailwindcss/typography for content styling</tech>
-      <tech>@tailwindcss/forms for form elements</tech>
-      <tech>@tailwindcss/aspect-ratio for responsive media</tech>
-      <tech>lucide-svelte for consistent iconography</tech>
-      <tech>@fontsource packages for self-hosted fonts</tech>
-    </styling>
-    <database>
-      <tech>Drizzle ORM for database operations</tech>
-    </database>
-    <testing>
-      <tech>Vitest for unit testing</tech>
-      <tech>Testing Library for component testing</tech>
-    </testing>
-    <security>
-      <tech>Node-RS Argon2 for password hashing</tech>
-      <tech>Oslo.js crypto for cryptographic operations</tech>
-      <tech>Zod for schema declaration and validation</tech>
-    </security>
-    <content>
-      <tech>TipTap for rich text editing</tech>
-      <tech>DOMPurify for HTML sanitization</tech>
-    </content>
-    <visualization>
-      <tech>D3.js v7 for network visualization</tech>
-    </visualization>
-  </technologies>
+## Design
+- Theme: Modern academic with traditional elements
+- Colors: Cardinal Red (#CE1628), Navy Blue (#003366), Sunflower Yellow (#F3C108), Charcoal Gray (#232020)
+- Typography: Sans-serif (main), serif (academic), geometric sans (innovation)
+- Layout: Grid-based, clean cards, minimalist icons with traditional accents, network visualization
 
-  <architecture>
-    <rule>Apply Repository pattern for data access layers</rule>
-    <rule>Use Store pattern for state management (custom stores or framework-provided)</rule>
-    <rule>Implement Service pattern for business logic</rule>
-    <rule>Follow Factory pattern for complex object creation</rule>
-    <rule>Use Observer pattern for reactive state updates</rule>
-    <rule>Implement Strategy pattern for interchangeable algorithms</rule>
-    <rule>Apply Adapter pattern for external service integration</rule>
-    <rule>Use Facade pattern to simplify complex subsystems</rule>
-  </architecture>
+## Tech Stack
+- Core: Svelte 5, SvelteKit 2.x, TypeScript 5.x, Vite 6.x, Bits UI
+- Cloud: Cloudflare Pages, D1 (SQLite), R2 (storage), Images
+- Styling: Tailwind CSS 4.x, lucide-svelte icons
+- Database: Drizzle ORM
+- Security: Oslo.js, Argon2id, Zod
+- Content: TipTap, DOMPurify
+- Visualization: D3.js v7
 
-  <code-style>
-    <rule>Follow TypeScript best practices and maintain type safety across the codebase</rule>
-    <rule>Use SvelteKit conventions for routing and data loading</rule>
-    <rule>Format code using Prettier configuration and ESLint rules</rule>
-    <rule>Keep component files focused and modular (maximum 200 lines recommended)</rule>
-    <rule>Use meaningful variable and function names that reflect their purpose</rule>
-    <rule>Type database queries using $inferSelect from schema definitions</rule>
-    <rule>Follow Cloudflare adapter constraints for serverless deployment</rule>
-    <rule>Implement proper component structure for each major section</rule>
-    <rule>Follow SOLID principles in code organization</rule>
-    <rule>Use dependency injection for better testability</rule>
-    <rule>Maintain consistent file and folder structure</rule>
-    <rule>Write self-documenting code with clear naming</rule>
-    <rule>Keep business logic separate from UI components</rule>
-    <rule>Implement proper error boundaries and error handling</rule>
-    <rule>Use TypeScript path aliases for clean imports</rule>
-    <rule>Follow semantic versioning for module updates</rule>
-  </code-style>
+## Development Approach
+- Progressive: Build in stages, pause after key components for review
+- Scope: Implement only what’s requested; clarify ambiguity with minimal viable solutions
+- Communication: Summarize completed work, classify changes (Small/Medium/Large), outline plans for Large changes
 
-  <styling>
-    <rule>Use Tailwind CSS utility classes for consistent styling</rule>
-    <rule>Follow mobile-first responsive design principles</rule>
-    <rule>Utilize @tailwindcss/typography for rich text content</rule>
-    <rule>Implement dark mode support using Tailwind's dark: variant</rule>
-    <rule>Create reusable component classes using @apply when needed</rule>
-    <rule>Maintain a consistent color palette using Tailwind theme configuration</rule>
-    <rule>Style Bits UI components using Tailwind classes</rule>
-    <rule>Follow spacing and sizing scale from Tailwind configuration</rule>
-    <rule>Use Lucide icons consistently with themed colors</rule>
-    <rule>Maintain consistent icon sizes across similar UI elements</rule>
-    <rule>Apply color transitions for interactive icons</rule>
-  </styling>
+## Architecture
+- Patterns: Repository (data), Store (state), Service (logic), Factory (objects), Observer (updates), Strategy (algorithms), Adapter (integration), Facade (simplicity)
+- Principles: YAGNI (avoid unnecessary features), KISS (keep solutions simple)
 
-  <security>
-    <rule>Follow session-based authentication patterns from auth.ts</rule>
-    <rule>Use crypto.getRandomValues for secure token generation</rule>
-    <rule>Implement proper session expiration and renewal (30 days with 15-day renewal)</rule>
-    <rule>Use Argon2 for password hashing</rule>
-    <rule>Use environment variables for sensitive configuration</rule>
-    <rule>Enforce proper cookie security attributes</rule>
-    <rule>Validate all session tokens before granting access</rule>
-    <rule>Implement role-based access control for content management</rule>
-    <rule>Enforce content submission validation and sanitization</rule>
-    <rule>Implement user permission levels for different operations</rule>
-  </security>
+## Business Logic
+- CMS: Admin-only CRUD for all entities (users, clubs, events, resources, posts, etc.) via a WordPress-like interface
+- Clubs: Manual creation/update of clubs and member roles (president, advisor, member) in `user_in_club`
+- Resources: Admin uploads documents/presentations/videos/links to `resource`, stored in R2, accessible to all
+- Events: Admin creates/updates events in `event`, tied to clubs, no recurring or external calendar sync
+- Visualization: D3.js displays static club/member connections from D1 (`club`, `user_in_club`), no real-time updates
+- Access: Admin-only content management; users view content without edit rights
 
-  <database>
-    <rule>Follow schema definitions in src/lib/server/db/schema.ts</rule>
-    <rule>Use proper typing for database queries and results</rule>
-    <rule>Implement migrations for schema changes</rule>
-    <rule>Add appropriate indexes for query optimization</rule>
-    <rule>Use Drizzle ORM features for type-safe queries</rule>
-    <rule>Configure proper D1 database bindings in wrangler.toml</rule>
-    <rule>Follow SQLite best practices for Cloudflare D1</rule>
-    <rule>Implement efficient data structures for network visualization</rule>
-    <rule>Design schema for content management system</rule>
-    <rule>Maintain proper relationship between users and content</rule>
-  </database>
+## Svelte 5 Syntax
+- Reactivity: Use `$state` for variables, `$derived` for computed values, `$effect` for side effects
+- Props: Declare with `let { prop } = $props()`, use `$bindable()` for bindable props
+- Events: Use `onclick` (not `on:click`), pass callbacks instead of `createEventDispatcher`
+- Content: Use snippets (`{#snippet}`) and `{@render}` instead of slots
+- Components: Instantiate with `mount`/`hydrate` (not `new`), avoid Svelte 4 class syntax
+- Migration: Run `npx sv migrate svelte-5` for automation, manually adjust events and bindings
 
-  <storage>
-    <rule>Use Cloudflare R2 for storing uploaded documents and resources</rule>
-    <rule>Implement proper bucket organization for different asset types</rule>
-    <rule>Use Cloudflare Images for optimized image delivery</rule>
-    <rule>Configure appropriate caching strategies for static assets</rule>
-    <rule>Implement secure upload policies and access controls</rule>
-    <rule>Use presigned URLs for secure file downloads</rule>
-    <rule>Follow S3-compatible API best practices for R2</rule>
-    <rule>Optimize image transformations using Cloudflare Images API</rule>
-    <rule>Implement file type validation for user uploads</rule>
-    <rule>Set up proper backup strategies for user content</rule>
-  </storage>
+## Complex Implementation Tactics
+- Break Down Components: Split large features (e.g., CMS forms, D3.js visualization) into smaller, reusable components (max 200 lines each)
+- Layered Logic: Separate UI, business logic, and data access into distinct files (e.g., `cms.service.ts`, `club.repo.ts`)
+- Incremental Builds: Implement complex features (e.g., network visualization) in stages—start with static data, add interactivity later
+- Facade Pattern: Use a single entry point (e.g., `cmsFacade`) to simplify interactions with multiple subsystems
+- Type Safety: Leverage TypeScript interfaces (e.g., `Club`, `Event`) from schema to catch errors early
+- Mock Data: Test complex logic (e.g., visualization) with static JSON before integrating D1 queries
+- Documentation: Add inline comments for complex flows (e.g., admin CRUD), keep external docs minimal
+- Refactor Early: Simplify over-engineered code during review checkpoints, adhering to KISS
 
-  <ui-components>
-    <rule>Utilize Bits UI primitives as base components</rule>
-    <rule>Use Bits UI Calendar for schedule management</rule>
-    <rule>Implement Bits UI Select for filtering interfaces</rule>
-    <rule>Use Bits UI Dialog for modal interactions</rule>
-    <rule>Implement Bits UI Form primitives for form components</rule>
-    <rule>Maintain accessibility through Bits UI ARIA integrations</rule>
-    <rule>Use Lucide icons instead of custom SVGs for better bundle optimization</rule>
-    <rule>Build rich text editor using Bits UI and TipTap</rule>
-    <rule>Compose complex interfaces using Bits UI primitives</rule>
-    <rule>Implement responsive variants of Bits UI components</rule>
-  </ui-components>
+## Code Guidelines
+- Use TypeScript with strict typing
+- Follow SvelteKit conventions
+- Keep components <200 lines
+- Apply SOLID principles and DI
+- Write self-documenting code with usage examples
+- Separate business logic from UI
+- Follow YAGNI and KISS to avoid over-engineering
 
-  <testing>
-    <rule>Write unit tests for new business logic components</rule>
-    <rule>Add integration tests for API endpoints</rule>
-    <rule>Include test cases for component rendering</rule>
-    <rule>Maintain test coverage for critical features</rule>
-    <rule>Test authentication flows thoroughly</rule>
+## Styling
+- Use Tailwind utilities
+- Design mobile-first, responsive, dark mode
+- Maintain consistent palette and spacing
+- Theme Lucide icons
 
-    <rule>Include database operation tests</rule>
-    <rule>Test D3.js visualization interactions</rule>
-    <rule>Verify content management workflows</rule>
-    <rule>Test user permission enforcement</rule>
-  </testing>
+## Security
+- Session auth (30-day expiry, 15-day renewal)
+- Hash passwords with Argon2
+- Implement role-based access (admin-only CMS)
+- Sanitize and validate content
 
-  <performance>
-    <rule>Optimize bundle size and code splitting (prefer Lucide icons over custom SVGs)</rule>
-    <rule>Use proper loading strategies for data fetching</rule>
-    <rule>Implement caching where appropriate</rule>
-    <rule>Profile and monitor performance metrics</rule>
-    <rule>Optimize database queries for D1 performance</rule>
-    <rule>Follow Cloudflare Pages and Workers best practices</rule>
-    <rule>Utilize Cloudflare Images for optimized image delivery</rule>
-    <rule>Optimize network graph rendering performance</rule>
-    <rule>Implement pagination for content listings</rule>
-    <rule>Optimize file upload handling</rule>
-    <rule>Implement Vietnamese font subsetting for performance</rule>
-    <rule>Configure proper Vietnamese text rendering</rule>
-    <rule>Optimize meta tags for Vietnamese search engines</rule>
-  </performance>
+## Database
+- Use schema in src/lib/server/db/schema.ts
+- Write type-safe queries with Drizzle
+- Optimize for visualization (e.g., `club`, `user_in_club`)
 
-  <documentation>
-    <rule>Update README.md for significant changes</rule>
-    <rule>Document API endpoints and their usage</rule>
-    <rule>Keep configuration files documented</rule>
-    <rule>Document authentication flows and security measures</rule>
-    <rule>Include database schema documentation</rule>
-    <rule>Document facility booking integration procedures</rule>
-    <rule>Provide content management system user guide</rule>
-    <rule>Document member roles and permissions</rule>
-    <rule>Document Vietnamese content guidelines and standards</rule>
-  </documentation>
+## Storage
+- Store resources in Cloudflare R2
+- Deliver images via Cloudflare Images
+- Enforce secure uploads/access (admin-only)
 
-  <vietnamese-content>
-    <rule>Follow standard Vietnamese typography rules and conventions</rule>
-    <rule>Ensure proper handling of Vietnamese diacritical marks</rule>
-    <rule>Use appropriate Vietnamese date and time formats</rule>
-    <rule>Implement Vietnamese-specific content validation rules</rule>
-    <rule>Follow Vietnamese academic writing style guidelines</rule>
-    <rule>Use consistent Vietnamese terminology across the platform</rule>
-    <rule>Ensure proper sorting and searching of Vietnamese text</rule>
-    <rule>Support Vietnamese input methods in all form fields</rule>
-    <rule>Optimize SEO for Vietnamese search engines</rule>
-    <rule>Follow Vietnamese cultural conventions in UI elements</rule>
-  </vietnamese-content>
+## UI Components
+- Build with Bits UI
+- Ensure accessibility (ARIA)
+- Integrate TipTap for rich text in CMS
 
-  <deployment>
-    <rule>Test builds locally before deployment</rule>
-    <rule>Configure Cloudflare Pages deployment settings</rule>
-    <rule>Set up proper D1 database bindings</rule>
-    <rule>Configure R2 bucket access and policies</rule>
-    <rule>Set up Cloudflare Images account and transformations</rule>
-    <rule>Manage environment variables in Cloudflare dashboard</rule>
-    <rule>Monitor Workers and Pages analytics</rule>
-    <rule>Implement proper staging environments</rule>
-    <rule>Configure automated backup procedures</rule>
-    <rule>Set up monitoring for user-generated content</rule>
-  </deployment>
+## Quality & Testing
+- Deliver testable increments
+- Unit test business logic (e.g., CRUD operations)
+- Integration test APIs
+- Verify auth flows
+- Note edge cases (e.g., duplicate slugs) and suggest tests
 
-  <university-club-networking>
-    <leadership-structure>
-      <role>Club President/Chair (Chủ nhiệm Câu lạc bộ)</role>
-      <role>Faculty Advisors/Professional Consultants (Ban cố vấn chuyên môn)</role>
-      <role>Executive Committee members</role>
-    </leadership-structure>
-    
-    <club-types>
-      <type>Language clubs (E-HUB, CFI)</type>
-      <type>Academic/research clubs (NCKH Mindset)</type>
-      <type>Skill development clubs (SLC)</type>
-    </club-types>
+## Performance
+- Minimize bundle size with code splitting
+- Optimize data fetching/caching
 
-    <activities>
-      <activity>Workshops and training sessions</activity>
-      <activity>Competitions and contests</activity>
-      <activity>Cultural exchange events</activity>
-      <activity>Research projects</activity>
-      <activity>Professional development events</activity>
-    </activities>
+## Vietnamese Support
+- Use Vietnamese date/time formats
 
-    <networking-features>
-      <feature>Cross-club collaboration tools</feature>
-      <feature>Joint event planning system</feature>
-      <feature>Inter-club communication channels</feature>
-      <feature>Resource sharing platform</feature>
-      <feature>Mentorship connection system</feature>
-    </networking-features>
-
-    <documentation-templates>
-      <template>Inter-club activity proposals</template>
-      <template>Club achievement records</template>
-      <template>Club profiles and contact information</template>
-      <template>Membership and activity tracking</template>
-    </documentation-templates>
-  </university-club-networking>
-</rules>
+## Club Networking
+- Structure: President, Advisors, Members (via `user_in_club`)
+- Activities: Workshops, competitions, research (via `event`, `research`)

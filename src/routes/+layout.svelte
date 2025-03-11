@@ -440,7 +440,7 @@
 							Liên kết nhanh
 						</h3>
 						<ul class="mt-6 space-y-3">
-							{#each [{ href: '/about', text: 'Giới thiệu' }, { href: '/news', text: 'Tin tức' }, { href: '/events', text: 'Sự kiện' }, { href: '/research', text: 'NSinh viên NCKH' }, { href: '/resources', text: 'Tài nguyên' }] as { href, text }}
+							{#each [{ href: '/about', text: 'Giới thiệu' }, { href: '/news', text: 'Tin tức' }, { href: '/events', text: 'Sự kiện' }, { href: '/research', text: 'Sinh viên NCKH' }, { href: '/resources', text: 'Tài nguyên' }] as { href, text }}
 								<li>
 									<a
 										{href}

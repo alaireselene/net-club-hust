@@ -3,8 +3,8 @@ import { sql } from 'drizzle-orm';
 
 // Timestamp tracking columns
 const timestamp = {
-	createdAt: integer({ mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`).notNull(),
-	updatedAt: integer({ mode: 'timestamp' }).$onUpdate(() => sql`(strftime('%s', 'now'))`)
+	createdAt: integer({ mode: 'timestamp' }).$default(() => sql`(strftime('%s','now'))`).notNull(),
+	updatedAt: integer({ mode: 'timestamp' }).$onUpdate(() => sql`(strftime('%s', 'now')`)
 }
 
 // User & Authentication
